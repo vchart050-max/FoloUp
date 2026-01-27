@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { type ThemeProviderProps } from "next-themes/dist/types";
+import type { ThemeProviderProps } from "next-themes/dist/types";
 import compose from "@/lib/compose";
 import { InterviewerProvider } from "@/contexts/interviewers.context";
 import { InterviewProvider } from "@/contexts/interviews.context";

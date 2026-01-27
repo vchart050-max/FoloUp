@@ -3,8 +3,8 @@
 import { OpenAI } from "openai";
 import { ResponseService } from "@/services/responses.service";
 import { InterviewService } from "@/services/interviews.service";
-import { Question } from "@/types/interview";
-import { Analytics } from "@/types/response";
+import type { Question } from "@/types/interview";
+import type { Analytics } from "@/types/response";
 import {
   getInterviewAnalyticsPrompt,
   SYSTEM_PROMPT,

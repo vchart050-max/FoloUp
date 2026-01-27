@@ -1,8 +1,8 @@
 "use client";
 
-import { Interview } from "@/types/interview";
-import { Interviewer } from "@/types/interviewer";
-import { Response } from "@/types/response";
+import type { Interview } from "@/types/interview";
+import type { Interviewer } from "@/types/interviewer";
+import type { Response } from "@/types/response";
 import React, { useEffect, useState } from "react";
 import { UserCircleIcon, SmileIcon, Info } from "lucide-react";
 import { useInterviewers } from "@/contexts/interviewers.context";
@@ -17,7 +17,7 @@ import {
   TooltipProvider,
 } from "@/components/ui/tooltip";
 import DataTable, {
-  TableData,
+  type TableData,
 } from "@/components/dashboard/interview/dataTable";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
@@ -121,7 +121,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
       [CandidateStatus.SELECTED]: 0,
     };
 
-    responses.forEach((response) => {
+    for (const response of responses) {
       const sentiment = response.details?.call_analysis?.user_sentiment;
       if (sentiment === "Positive") {
         sentimentCounter.positive += 1;
@@ -158,7 +158,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
       ) {
         statusCounter[response.candidate_status as CandidateStatus]++;
       }
-    });
+    }
 
     setSentimentCount(sentimentCounter);
     setCallCompletion(callCompletionCounter);

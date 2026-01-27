@@ -17,9 +17,9 @@ export async function POST(req: Request) {
 
   let callSummaries = "";
   if (responses) {
-    responses.forEach((response) => {
+    for (const response of responses) {
       callSummaries += response.details?.call_analysis?.call_summary;
-    });
+    }
   }
 
   const openai = new OpenAI({

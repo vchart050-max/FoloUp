@@ -17,8 +17,8 @@ import MiniLoader from "../loaders/mini-loader/miniLoader";
 import { toast } from "sonner";
 import { isLightColor, testEmail } from "@/lib/utils";
 import { ResponseService } from "@/services/responses.service";
-import { Interview } from "@/types/interview";
-import { FeedbackData } from "@/types/response";
+import type { Interview } from "@/types/interview";
+import type { FeedbackData } from "@/types/response";
 import { FeedbackService } from "@/services/feedback.service";
 import { FeedbackForm } from "@/components/call/feedbackForm";
 import {
@@ -120,7 +120,7 @@ function Call({ interview }: InterviewProps) {
       intervalId = setInterval(() => setTime(time + 1), 10);
     }
     setCurrentTimeDuration(String(Math.floor(time / 100)));
-    if (Number(currentTimeDuration) == Number(interviewTimeDuration) * 60) {
+    if (Number(currentTimeDuration) === Number(interviewTimeDuration) * 60) {
       webClient.stopCall();
       setIsEnded(true);
     }
@@ -168,12 +168,12 @@ function Call({ interview }: InterviewProps) {
         const transcripts: transcriptType[] = update.transcript;
         const roleContents: { [key: string]: string } = {};
 
-        transcripts.forEach((transcript) => {
+        for (const transcript of transcripts) {
           roleContents[transcript?.role] = transcript?.content;
-        });
+        }
 
-        setLastInterviewerResponse(roleContents["agent"]);
-        setLastUserResponse(roleContents["user"]);
+        setLastInterviewerResponse(roleContents.agent);
+        setLastUserResponse(roleContents.user);
       }
       //TODO: highlight the newly uttered word in the UI
     });
@@ -416,7 +416,7 @@ function Call({ interview }: InterviewProps) {
                 <div className="border-x-2 border-grey w-[50%] my-auto min-h-[70%]">
                   <div className="flex flex-col justify-evenly">
                     <div
-                      className={`text-[22px] w-[80%] md:text-[26px] mt-4 min-h-[250px] mx-auto px-6`}
+                      className={"text-[22px] w-[80%] md:text-[26px] mt-4 min-h-[250px] mx-auto px-6"}
                     >
                       {lastInterviewerResponse}
                     </div>
@@ -440,13 +440,13 @@ function Call({ interview }: InterviewProps) {
                 <div className="flex flex-col justify-evenly w-[50%]">
                   <div
                     ref={lastUserResponseRef}
-                    className={`text-[22px] w-[80%] md:text-[26px] mt-4 mx-auto h-[250px] px-6 overflow-y-auto`}
+                    className={"text-[22px] w-[80%] md:text-[26px] mt-4 mx-auto h-[250px] px-6 overflow-y-auto"}
                   >
                     {lastUserResponse}
                   </div>
                   <div className="flex flex-col mx-auto justify-center items-center align-middle">
                     <Image
-                      src={`/user-icon.png`}
+                      src={"/user-icon.png"}
                       alt="Picture of the user"
                       width={120}
                       height={120}
@@ -504,7 +504,7 @@ function Call({ interview }: InterviewProps) {
                     <CheckCircleIcon className="h-[2rem] w-[2rem] mx-auto my-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 text-indigo-500 " />
                     <p className="text-lg font-semibold text-center">
                       {isStarted
-                        ? `Thank you for taking the time to participate in this interview`
+                        ? "Thank you for taking the time to participate in this interview"
                         : "Thank you very much for considering."}
                     </p>
                     <p className="text-center">
@@ -559,7 +559,7 @@ function Call({ interview }: InterviewProps) {
         <a
           className="flex flex-row justify-center align-middle mt-3"
           href="https://folo-up.co/"
-          target="_blank"
+          target="_blank" rel="noreferrer"
         >
           <div className="text-center text-md font-semibold mr-2  ">
             Powered by{" "}

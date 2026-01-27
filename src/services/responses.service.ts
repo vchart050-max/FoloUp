@@ -35,9 +35,9 @@ const getAllResponses = async (interviewId: string) => {
   try {
     const { data, error } = await supabase
       .from("response")
-      .select(`*`)
+      .select("*")
       .eq("interview_id", interviewId)
-      .or(`details.is.null, details->call_analysis.not.is.null`)
+      .or("details.is.null, details->call_analysis.not.is.null")
       .eq("is_ended", true)
       .order("created_at", { ascending: false });
 
@@ -70,7 +70,7 @@ const getAllEmailAddressesForInterview = async (interviewId: string) => {
   try {
     const { data, error } = await supabase
       .from("response")
-      .select(`email`)
+      .select("email")
       .eq("interview_id", interviewId);
 
     return data || [];
@@ -85,7 +85,7 @@ const getResponseByCallId = async (id: string) => {
   try {
     const { data, error } = await supabase
       .from("response")
-      .select(`*`)
+      .select("*")
       .filter("call_id", "eq", id);
 
     return data ? data[0] : null;

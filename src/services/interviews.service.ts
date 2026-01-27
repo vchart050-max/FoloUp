@@ -6,7 +6,7 @@ const getAllInterviews = async (userId: string, organizationId: string) => {
   try {
     const { data: clientData, error: clientError } = await supabase
       .from("interview")
-      .select(`*`)
+      .select("*")
       .or(`organization_id.eq.${organizationId},user_id.eq.${userId}`)
       .order("created_at", { ascending: false });
 
@@ -22,7 +22,7 @@ const getInterviewById = async (id: string) => {
   try {
     const { data, error } = await supabase
       .from("interview")
-      .select(`*`)
+      .select("*")
       .or(`id.eq.${id},readable_slug.eq.${id}`);
 
     return data ? data[0] : null;
@@ -65,7 +65,7 @@ const getAllRespondents = async (interviewId: string) => {
   try {
     const { data, error } = await supabase
       .from("interview")
-      .select(`respondents`)
+      .select("respondents")
       .eq("interview_id", interviewId);
 
     return data || [];

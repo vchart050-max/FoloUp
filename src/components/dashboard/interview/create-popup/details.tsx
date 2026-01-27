@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useInterviewers } from "@/contexts/interviewers.context";
-import { InterviewBase, Question } from "@/types/interview";
+import type { InterviewBase, Question } from "@/types/interview";
 import { ChevronRight, ChevronLeft, Info } from "lucide-react";
 import Image from "next/image";
 import { CardTitle } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import FileUpload from "../fileUpload";
 import Modal from "@/components/dashboard/Modal";
 import InterviewerDetailsModal from "@/components/dashboard/interviewer/interviewerDetailsModal";
-import { Interviewer } from "@/types/interviewer";
+import type { Interviewer } from "@/types/interviewer";
 
 interface Props {
   open: boolean;
@@ -49,7 +49,7 @@ function DetailsPopup({
     interviewData.is_anonymous,
   );
   const [numQuestions, setNumQuestions] = useState(
-    interviewData.question_count == 0
+    interviewData.question_count === 0
       ? ""
       : String(interviewData.question_count),
   );
@@ -57,14 +57,14 @@ function DetailsPopup({
   const [uploadedDocumentContext, setUploadedDocumentContext] = useState("");
 
   const slideLeft = (id: string, value: number) => {
-    var slider = document.getElementById(`${id}`);
+    const slider = document.getElementById(`${id}`);
     if (slider) {
       slider.scrollLeft = slider.scrollLeft - value;
     }
   };
 
   const slideRight = (id: string, value: number) => {
-    var slider = document.getElementById(`${id}`);
+    const slider = document.getElementById(`${id}`);
     if (slider) {
       slider.scrollLeft = slider.scrollLeft + value;
     }
@@ -168,6 +168,7 @@ function DetailsPopup({
                   key={item.id}
                 >
                   <button
+                    type="button"
                     className="absolute ml-9"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -177,7 +178,8 @@ function DetailsPopup({
                   >
                     <Info size={18} color="#4f46e5" strokeWidth={2.2} />
                   </button>
-                  <div
+                  <button
+                    type="button"
                     className={`w-[96px] overflow-hidden rounded-full ${
                       selectedInterviewer === item.id
                         ? "border-4 border-indigo-600"
@@ -192,7 +194,7 @@ function DetailsPopup({
                       height={70}
                       className="w-full h-full object-cover"
                     />
-                  </div>
+                  </button>
                   <CardTitle className="mt-0 text-xs text-center">
                     {item.name}
                   </CardTitle>
@@ -234,7 +236,7 @@ function DetailsPopup({
             setFileName={setFileName}
             setUploadedDocumentContext={setUploadedDocumentContext}
           />
-          <label className="flex-col mt-7 w-full">
+          <div className="flex-col mt-7 w-full">
             <div className="flex items-center cursor-pointer">
               <span className="text-sm font-medium">
                 Do you prefer the interviewees&apos; responses to be anonymous?
@@ -254,7 +256,7 @@ function DetailsPopup({
               Note: If not anonymous, the interviewee&apos;s email and name will
               be collected.
             </span>
-          </label>
+          </div>
           <div className="flex flex-row gap-3 justify-between w-full mt-3">
             <div className="flex flex-row justify-center items-center ">
               <h3 className="text-sm font-medium ">Number of Questions:</h3>
@@ -306,13 +308,11 @@ function DetailsPopup({
           <div className="flex flex-row w-full justify-center items-center space-x-24 mt-5">
             <Button
               disabled={
-                (name &&
+                (!(name &&
                 objective &&
                 numQuestions &&
                 duration &&
-                selectedInterviewer != BigInt(0)
-                  ? false
-                  : true) || isClicked
+                selectedInterviewer !== BigInt(0))) || isClicked
               }
               className="bg-indigo-600 hover:bg-indigo-800  w-40"
               onClick={() => {
@@ -324,13 +324,11 @@ function DetailsPopup({
             </Button>
             <Button
               disabled={
-                (name &&
+                (!(name &&
                 objective &&
                 numQuestions &&
                 duration &&
-                selectedInterviewer != BigInt(0)
-                  ? false
-                  : true) || isClicked
+                selectedInterviewer !== BigInt(0))) || isClicked
               }
               className="bg-indigo-600 w-40 hover:bg-indigo-800"
               onClick={() => {

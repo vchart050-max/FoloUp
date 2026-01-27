@@ -2,7 +2,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Modal from "@/components/dashboard/Modal";
-import { Interviewer } from "@/types/interviewer";
+import type { Interviewer } from "@/types/interviewer";
 import InterviewerDetailsModal from "@/components/dashboard/interviewer/interviewerDetailsModal";
 
 interface Props {

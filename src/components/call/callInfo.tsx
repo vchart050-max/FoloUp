@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Analytics, CallData } from "@/types/response";
+import type { Analytics, CallData } from "@/types/response";
 import axios from "axios";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import ReactAudioPlayer from "react-audio-player";
@@ -169,15 +169,16 @@ function CallInfo({
               </p> */}
               <div>
                 <div className="flex justify-between items-center pb-4 pr-2">
-                  <div
-                    className=" inline-flex items-center text-indigo-600 hover:cursor-pointer"
+                  <button
+                    type="button"
+                    className="inline-flex items-center text-indigo-600 hover:cursor-pointer"
                     onClick={() => {
                       router.push(`/interviews/${interviewId}`);
                     }}
                   >
                     <ArrowLeft className="mr-2" />
                     <p className="text-sm font-semibold">Back to Summary</p>
-                  </div>
+                  </button>
                   {tabSwitchCount && tabSwitchCount > 0 && (
                     <p className="text-sm font-semibold text-red-500 bg-red-200 rounded-sm px-2 py-1">
                       Tab Switching Detected
@@ -381,11 +382,11 @@ function CallInfo({
 
                   <div
                     className={`${
-                      call?.call_analysis?.user_sentiment == "Neutral"
+                      call?.call_analysis?.user_sentiment === "Neutral"
                         ? "text-yellow-500"
-                        : call?.call_analysis?.user_sentiment == "Negative"
+                        : call?.call_analysis?.user_sentiment === "Negative"
                           ? "text-red-500"
-                          : call?.call_analysis?.user_sentiment == "Positive"
+                          : call?.call_analysis?.user_sentiment === "Positive"
                             ? "text-green-500"
                             : "text-transparent"
                     } text-xl`}
@@ -409,8 +410,7 @@ function CallInfo({
               </div>
             </div>
           </div>
-          {analytics &&
-            analytics.questionSummaries &&
+          {analytics?.questionSummaries &&
             analytics.questionSummaries.length > 0 && (
               <div className="bg-slate-200 rounded-2xl min-h-[120px] p-4 px-5 my-3">
                 <p className="font-semibold my-2 mb-4">Question Summary</p>
@@ -431,7 +431,7 @@ function CallInfo({
             <ScrollArea className="rounded-2xl text-sm h-96  overflow-y-auto whitespace-pre-line px-2">
               <div
                 className="text-sm p-4 rounded-2xl leading-5 bg-slate-50"
-                // eslint-disable-next-line react/no-danger
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: required for markdown rendering
                 dangerouslySetInnerHTML={{ __html: marked(transcript) }}
               />
             </ScrollArea>

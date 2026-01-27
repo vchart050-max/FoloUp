@@ -11,14 +11,14 @@ function Interviewers() {
   const { interviewers, interviewersLoading } = useInterviewers();
 
   const slideLeft = () => {
-    var slider = document.getElementById("slider");
+    const slider = document.getElementById("slider");
     if (slider) {
       slider.scrollLeft = slider.scrollLeft - 190;
     }
   };
 
   const slideRight = () => {
-    var slider = document.getElementById("slider");
+    const slider = document.getElementById("slider");
     if (slider) {
       slider.scrollLeft = slider.scrollLeft + 190;
     }

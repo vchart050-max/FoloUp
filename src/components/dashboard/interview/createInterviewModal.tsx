@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import LoaderWithLogo from "@/components/loaders/loader-with-logo/loaderWithLogo";
 import DetailsPopup from "@/components/dashboard/interview/create-popup/details";
 import QuestionsPopup from "@/components/dashboard/interview/create-popup/questions";
-import { InterviewBase } from "@/types/interview";
+import type { InterviewBase } from "@/types/interview";
 
 interface Props {
   open: boolean;
@@ -35,12 +35,11 @@ function CreateInterviewModal({ open, setOpen }: Props) {
   const [fileName, setFileName] = useState("");
 
   useEffect(() => {
-    if (loading == true) {
+    if (loading === true) {
       setLoading(false);
       setProceed(true);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [interviewData]);
+  }, [interviewData, loading]);
 
   useEffect(() => {
     if (!open) {

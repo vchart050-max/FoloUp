@@ -24,7 +24,7 @@ const getClientById = async (
   try {
     const { data, error } = await supabase
       .from("user")
-      .select(`*`)
+      .select("*")
       .filter("id", "eq", id);
 
     if (!data || (data.length === 0 && email)) {
@@ -71,7 +71,7 @@ const getOrganizationById = async (
   try {
     const { data, error } = await supabase
       .from("organization")
-      .select(`*`)
+      .select("*")
       .filter("id", "eq", organization_id);
 
     if (!data || data.length === 0) {

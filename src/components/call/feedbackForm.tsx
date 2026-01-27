@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { FeedbackData } from "@/types/response";
+import type { FeedbackData } from "@/types/response";
 
 enum SatisfactionLevel {
   Positive = "😀",
@@ -38,6 +38,7 @@ export function FeedbackForm({ onSubmit, email }: FeedbackFormProps) {
       <div className="flex justify-center space-x-4 mb-4">
         {Object.values(SatisfactionLevel).map((emoji) => (
           <button
+            type="button"
             key={emoji}
             className={`text-3xl ${satisfaction === emoji ? "border-2 border-indigo-600" : ""}`}
             onClick={() => setSatisfaction(emoji)}

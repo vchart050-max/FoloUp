@@ -2,7 +2,7 @@ import Image from "next/image";
 import { CardTitle } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
 import ReactAudioPlayer from "react-audio-player";
-import { Interviewer } from "@/types/interviewer";
+import type { Interviewer } from "@/types/interviewer";
 
 interface Props {
   interviewer: Interviewer | undefined;

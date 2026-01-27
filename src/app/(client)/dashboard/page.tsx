@@ -98,7 +98,7 @@ function Interviews() {
           Start getting responses now!
         </h3>
         <div className="relative flex items-center mt-1 flex-wrap">
-          {currentPlan == "free_trial_over" ? (
+          {currentPlan === "free_trial_over" ? (
             <Card className=" flex bg-gray-200 items-center border-dashed border-gray-700 border-2 hover:scale-105 ease-in-out duration-300 h-60 w-56 ml-1 mr-3 mt-4 rounded-xl shrink-0 overflow-hidden shadow-md">
               <CardContent className="flex items-center flex-col mx-auto">
                 <div className="flex flex-col justify-center items-center w-full overflow-hidden">

@@ -84,8 +84,9 @@ const createInterviewerCard = () => {
             Create an interviewer yourself!
           </CardTitle>
           <div className="mt-3 p-2 flex flex-row justify-center space-x-10 items-center">
-            <div
-              className=" flex flex-col items-center justify-center overflow-hidden border-4 border-gray-500 rounded-xl h-56 w-52"
+            <button
+              type="button"
+              className="flex flex-col items-center justify-center overflow-hidden border-4 border-gray-500 rounded-xl h-56 w-52"
               onClick={() => setGallery(true)}
             >
               {image ? (
@@ -108,7 +109,7 @@ const createInterviewerCard = () => {
                   </h4>
                 </div>
               )}
-            </div>
+            </button>
             <div className="flex flex-col justify-center items-start ml-4">
               <div className="flex flex-row justify-center items-center">
                 <h3 className="text-lg font-medium">Name</h3>
@@ -175,7 +176,7 @@ const createInterviewerCard = () => {
           </div>
           <div className="flex flex-row justify-end mr-4">
             <Button
-              disabled={(name && image ? false : true) || isClicked}
+              disabled={(!(name && image )) || isClicked}
               className="bg-indigo-600  hover:bg-indigo-800"
               onClick={() => {
                 setIsClicked(true);
@@ -200,8 +201,9 @@ const createInterviewerCard = () => {
           </CardTitle>
           <ScrollArea className="mt-3 h-96">
             <div className="flex flex-row flex-wrap justify-center items-center">
-              {avatars.map((item, key) => (
-                <div
+              {avatars.map((item) => (
+                <button
+                  type="button"
                   key={item.id}
                   className="flex flex-col items-center justify-center border-2 border-gray-500 rounded-xl overflow-hidden m-2 cursor-pointer"
                   onClick={() => {
@@ -210,7 +212,7 @@ const createInterviewerCard = () => {
                   }}
                 >
                   <Image alt="avatar" width={125} height={100} src={item.img} />
-                </div>
+                </button>
               ))}
             </div>
           </ScrollArea>

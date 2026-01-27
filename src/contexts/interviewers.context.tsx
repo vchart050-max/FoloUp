@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useContext, ReactNode, useEffect } from "react";
-import { Interviewer } from "@/types/interviewer";
+import React, { useState, useContext, type ReactNode, useEffect } from "react";
+import type { Interviewer } from "@/types/interviewer";
 import { InterviewerService } from "@/services/interviewers.service";
 import { useClerk } from "@clerk/nextjs";
 

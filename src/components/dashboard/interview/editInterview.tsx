@@ -1,6 +1,6 @@
 "use client";
 
-import { Interview, Question } from "@/types/interview";
+import type { Interview, Question } from "@/types/interview";
 import React, { useEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Plus, SaveIcon, TrashIcon } from "lucide-react";
@@ -45,7 +45,7 @@ function EditInterview({ interview }: EditInterviewProps) {
   const [numQuestions, setNumQuestions] = useState<number>(
     interview?.question_count || 1,
   );
-  const [duration, setDuration] = useState<Number>(
+  const [duration, setDuration] = useState<number>(
     Number(interview?.time_duration),
   );
   const [questions, setQuestions] = useState<Question[]>(
@@ -159,7 +159,8 @@ function EditInterview({ interview }: EditInterviewProps) {
     <div className=" h-screen z-[10] mx-2">
       <div className="flex flex-col bg-gray-200 rounded-md min-h-[120px] p-2 pl-4">
         <div>
-          <div
+          <button
+            type="button"
             className="mt-2 ml-1 pr-2 inline-flex items-center text-indigo-600 hover:cursor-pointer"
             onClick={() => {
               router.push(`/interviews/${interview?.id}`);
@@ -167,7 +168,7 @@ function EditInterview({ interview }: EditInterviewProps) {
           >
             <ArrowLeft className="mr-2" />
             <p className="text-sm font-semibold">Back to Summary</p>
-          </div>
+          </button>
         </div>
         <div className="flex flex-row justify-between">
           <p className="mt-3 mb-1 ml-2 font-medium">
@@ -253,7 +254,8 @@ function EditInterview({ interview }: EditInterviewProps) {
                     className=" p-0 inline-block cursor-pointer hover:scale-105 ease-in-out duration-300  ml-1 mr-3 rounded-xl shrink-0 overflow-hidden"
                     key={item.id}
                   >
-                    <div
+                    <button
+                      type="button"
                       className={`w-[96px] overflow-hidden rounded-full ${
                         selectedInterviewer === item.id
                           ? "border-4 border-indigo-600"
@@ -270,7 +272,7 @@ function EditInterview({ interview }: EditInterviewProps) {
                         height={70}
                         className="w-full h-full object-cover"
                       />
-                    </div>
+                    </button>
                     <CardTitle className="mt-0 text-xs text-center">
                       {item.name}
                     </CardTitle>
@@ -280,7 +282,7 @@ function EditInterview({ interview }: EditInterviewProps) {
             </div>
           </div>
         </div>
-        <label className="flex-col mt-2 ml-2 w-full">
+        <div className="flex-col mt-2 ml-2 w-full">
           <div className="flex items-center cursor-pointer">
             <span className="text-sm font-medium">
               Do you prefer the interviewees&apos; responses to be anonymous?
@@ -300,7 +302,7 @@ function EditInterview({ interview }: EditInterviewProps) {
             Note: If not anonymous, the interviewee&apos;s email and name will
             be collected.
           </span>
-        </label>
+        </div>
         <div className="flex flex-row justify-between w-[75%] gap-3 ml-2">
           <div className="flex flex-row justify-center items-center mt-5 ">
             <h3 className="font-medium ">No. of Questions:</h3>
@@ -362,7 +364,8 @@ function EditInterview({ interview }: EditInterviewProps) {
           ))}
           <div ref={endOfListRef} />
           {questions.length < numQuestions ? (
-            <div
+            <button
+              type="button"
               className="border-indigo-600 opacity-75 hover:opacity-100 w-fit text-center rounded-full mx-auto"
               onClick={handleAddQuestion}
             >
@@ -371,7 +374,7 @@ function EditInterview({ interview }: EditInterviewProps) {
                 strokeWidth={2.2}
                 className="text-indigo-600 text-center cursor-pointer"
               />
-            </div>
+            </button>
           ) : (
             <></>
           )}

@@ -1,5 +1,5 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { FeedbackData } from "@/types/response";
+import type { FeedbackData } from "@/types/response";
 
 const supabase = createClientComponentClient();
 

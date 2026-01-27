@@ -5,7 +5,7 @@ import { useEffect, useState, use } from "react";
 import Call from "@/components/call";
 import Image from "next/image";
 import { ArrowUpRightSquareIcon } from "lucide-react";
-import { Interview } from "@/types/interview";
+import type { Interview } from "@/types/interview";
 import LoaderWithText from "@/components/loaders/loader-with-text/loaderWithText";
 
 type Props = {
@@ -90,7 +90,7 @@ function InterviewInterface({ params }: Props) {
     if (interview) {
       setIsActive(interview?.is_active === true);
     }
-  }, [interview, resolvedParams.interviewId]);
+  }, [interview]);
 
   useEffect(() => {
     const fetchinterview = async () => {
@@ -109,8 +109,7 @@ function InterviewInterface({ params }: Props) {
     };
 
     fetchinterview();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getInterviewById, resolvedParams.interviewId]);
 
   return (
     <div>
@@ -150,7 +149,7 @@ function InterviewInterface({ params }: Props) {
           <a
             className="font-bold underline"
             href="www.folo-up.co"
-            target="_blank"
+            target="_blank" rel="noreferrer"
           >
             Folo<span className="text-indigo-600">Up</span>
           </a>

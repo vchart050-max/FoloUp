@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
 import { useClerk, useOrganization } from "@clerk/nextjs";
-import { InterviewBase, Question } from "@/types/interview";
+import type { InterviewBase, Question } from "@/types/interview";
 import { useInterviews } from "@/contexts/interviews.context";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import QuestionCard from "@/components/dashboard/interview/create-popup/questionCard";
@@ -133,16 +133,17 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
           <div ref={endOfListRef} />
         </ScrollArea>
         {questions.length < interviewData.question_count ? (
-          <div
-            className="border-indigo-600 opacity-75 hover:opacity-100 w-fit  rounded-full"
+          <button
+            type="button"
+            className="border-indigo-600 opacity-75 hover:opacity-100 w-fit rounded-full"
             onClick={handleAddQuestion}
           >
             <Plus
               size={45}
               strokeWidth={2.2}
-              className="text-indigo-600  cursor-pointer"
+              className="text-indigo-600 cursor-pointer"
             />
-          </div>
+          </button>
         ) : (
           <></>
         )}

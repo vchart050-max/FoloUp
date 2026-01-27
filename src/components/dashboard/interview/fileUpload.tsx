@@ -74,11 +74,9 @@ function FileUpload({
         >
           <input {...getInputProps()} />
           <>
-            <>
               <Inbox className="w-8 h-8 text-blue-500" />
               <p className="mt-2 text-sm text-slate-400">Drop PDF Here</p>
             </>
-          </>
         </div>
       ) : (
         <div className="text-left">
@@ -87,12 +85,13 @@ function FileUpload({
           </p>
           <p className="mt-2 text-xs text-slate-600">
             Do you want to{" "}
-            <span
+            <button
+              type="button"
               className="underline text-slate-950 cursor-pointer font-semibold"
               onClick={() => setIsUploaded(false)}
             >
               Reupload?
-            </span>
+            </button>
           </p>
         </div>
       )}

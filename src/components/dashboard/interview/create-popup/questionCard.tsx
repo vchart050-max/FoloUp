@@ -1,4 +1,4 @@
-import { Question } from "@/types/interview";
+import type { Question } from "@/types/interview";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
@@ -35,7 +35,7 @@ const questionCard = ({
                   <TooltipTrigger asChild>
                     <Button
                       className={`text-xs h-7  hover:bg-indigo-800  ${
-                        questionData?.follow_up_count == 1
+                        questionData?.follow_up_count === 1
                           ? "bg-indigo-600"
                           : "opacity-50"
                       } `}
@@ -60,7 +60,7 @@ const questionCard = ({
                   <TooltipTrigger asChild>
                     <Button
                       className={`text-xs h-7  hover:bg-indigo-800 ${
-                        questionData?.follow_up_count == 2
+                        questionData?.follow_up_count === 2
                           ? "bg-indigo-600"
                           : "opacity-50"
                       } `}
@@ -85,7 +85,7 @@ const questionCard = ({
                   <TooltipTrigger asChild>
                     <Button
                       className={`text-xs h-7 hover:bg-indigo-800  ${
-                        questionData?.follow_up_count == 3
+                        questionData?.follow_up_count === 3
                           ? "bg-indigo-600"
                           : "opacity-50"
                       } `}

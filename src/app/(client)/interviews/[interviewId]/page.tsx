@@ -10,8 +10,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { useRouter } from "next/navigation";
 import { ResponseService } from "@/services/responses.service";
 import { ClientService } from "@/services/clients.service";
-import { Interview } from "@/types/interview";
-import { Response } from "@/types/response";
+import type { Interview } from "@/types/interview";
+import type { Response } from "@/types/response";
 import { formatTimestampToDateHHMM } from "@/lib/utils";
 import CallInfo from "@/components/call/callInfo";
 import SummaryInfo from "@/components/dashboard/interview/summaryInfo";
@@ -102,9 +102,7 @@ function InterviewHome({ params, searchParams }: Props) {
     if (!interview || !isGeneratingInsights) {
       fetchInterview();
     }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getInterviewById, resolvedParams.interviewId, isGeneratingInsights]);
+  }, [getInterviewById, resolvedParams.interviewId, isGeneratingInsights, interview]);
 
   useEffect(() => {
     const fetchOrganizationData = async () => {
@@ -138,8 +136,7 @@ function InterviewHome({ params, searchParams }: Props) {
     };
 
     fetchResponses();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [resolvedParams.interviewId]);
 
   const handleDeleteResponse = (deletedCallId: string) => {
     if (responses) {
@@ -231,7 +228,7 @@ function InterviewHome({ params, searchParams }: Props) {
     setIsSharePopupOpen(false);
   };
 
-  const handleColorChange = (color: any) => {
+  const handleColorChange = (color: { hex: string }) => {
     setThemeColor(color.hex);
   };
 
@@ -247,12 +244,12 @@ function InterviewHome({ params, searchParams }: Props) {
     if (!responses) {
       return [];
     }
-    if (filterStatus == "ALL") {
+    if (filterStatus === "ALL") {
       return responses;
     }
 
     return responses?.filter(
-      (response) => response?.candidate_status == filterStatus,
+      (response) => response?.candidate_status === filterStatus,
     );
   };
 
@@ -374,8 +371,8 @@ function InterviewHome({ params, searchParams }: Props) {
               </Tooltip>
             </TooltipProvider>
 
-            <label className="inline-flex cursor-pointer">
-              {currentPlan == "free_trial_over" ? (
+            <div className="inline-flex cursor-pointer">
+              {currentPlan === "free_trial_over" ? (
                 <>
                   <span className="ms-3 my-auto text-sm">Inactive</span>
                   <TooltipProvider>
@@ -402,7 +399,7 @@ function InterviewHome({ params, searchParams }: Props) {
                   />
                 </>
               )}
-            </label>
+            </div>
           </div>
           <div className="flex flex-row w-full p-2 h-[85%] gap-1 ">
             <div className="w-[20%] flex flex-col p-2 divide-y-2 rounded-sm border-2 border-slate-100">
@@ -454,9 +451,10 @@ function InterviewHome({ params, searchParams }: Props) {
               <ScrollArea className="h-full p-1 rounded-md border-none">
                 {filterResponses().length > 0 ? (
                   filterResponses().map((response) => (
-                    <div
+                    <button
+                      type="button"
                       className={`p-2 rounded-md hover:bg-indigo-100 border-2 my-1 text-left text-xs ${
-                        resolvedSearchParams.call == response.call_id
+                        resolvedSearchParams.call === response.call_id
                           ? "bg-indigo-200"
                           : "border-indigo-100"
                       } flex flex-row justify-between cursor-pointer w-full`}
@@ -532,7 +530,7 @@ function InterviewHome({ params, searchParams }: Props) {
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </button>
                   ))
                 ) : (
                   <p className="text-center text-gray-500">
