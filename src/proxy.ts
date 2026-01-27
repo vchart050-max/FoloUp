@@ -18,13 +18,15 @@ const isProtectedRoute = createRouteMatcher([
   "/interview(.*)",
 ]);
 
-export default clerkMiddleware((auth, req) => {
+export default clerkMiddleware(async (auth, req) => {
+  const authData = await auth();
+
   if (!isPublicRoute(req)) {
-    auth().protect();
+    await authData.protect();
   }
 
-  if (!auth().userId && isProtectedRoute(req)) {
-    return auth().redirectToSignIn();
+  if (!authData.userId && isProtectedRoute(req)) {
+    return authData.redirectToSignIn();
   }
 });
 

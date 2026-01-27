@@ -1,7 +1,7 @@
 "use client";
 
 import { useInterviews } from "@/contexts/interviews.context";
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import Call from "@/components/call";
 import Image from "next/image";
 import { ArrowUpRightSquareIcon } from "lucide-react";
@@ -9,9 +9,9 @@ import { Interview } from "@/types/interview";
 import LoaderWithText from "@/components/loaders/loader-with-text/loaderWithText";
 
 type Props = {
-  params: {
+  params: Promise<{
     interviewId: string;
-  };
+  }>;
 };
 
 type PopupProps = {
@@ -81,6 +81,7 @@ function PopUpMessage({ title, description, image }: PopupProps) {
 }
 
 function InterviewInterface({ params }: Props) {
+  const resolvedParams = use(params);
   const [interview, setInterview] = useState<Interview>();
   const [isActive, setIsActive] = useState(true);
   const { getInterviewById } = useInterviews();
@@ -89,12 +90,12 @@ function InterviewInterface({ params }: Props) {
     if (interview) {
       setIsActive(interview?.is_active === true);
     }
-  }, [interview, params.interviewId]);
+  }, [interview, resolvedParams.interviewId]);
 
   useEffect(() => {
     const fetchinterview = async () => {
       try {
-        const response = await getInterviewById(params.interviewId);
+        const response = await getInterviewById(resolvedParams.interviewId);
         if (response) {
           setInterview(response);
           document.title = response.name;
