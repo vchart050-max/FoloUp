@@ -34,7 +34,7 @@ function CreateInterviewModal({ open, setOpen }: Props) {
   const [isUploaded, setIsUploaded] = useState(false);
   const [fileName, setFileName] = useState("");
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Need to check 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Need to check
   useEffect(() => {
     if (loading === true) {
       setLoading(false);

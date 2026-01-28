@@ -149,7 +149,8 @@ function InterviewInterface({ params }: Props) {
           <a
             className="font-bold underline"
             href="www.folo-up.co"
-            target="_blank" rel="noreferrer"
+            target="_blank"
+            rel="noreferrer"
           >
             Folo<span className="text-indigo-600">Up</span>
           </a>

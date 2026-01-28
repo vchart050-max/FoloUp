@@ -102,7 +102,12 @@ function InterviewHome({ params, searchParams }: Props) {
     if (!interview || !isGeneratingInsights) {
       fetchInterview();
     }
-  }, [getInterviewById, resolvedParams.interviewId, isGeneratingInsights, interview]);
+  }, [
+    getInterviewById,
+    resolvedParams.interviewId,
+    isGeneratingInsights,
+    interview,
+  ]);
 
   useEffect(() => {
     const fetchOrganizationData = async () => {

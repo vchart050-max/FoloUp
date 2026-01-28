@@ -308,11 +308,13 @@ function DetailsPopup({
           <div className="flex flex-row w-full justify-center items-center space-x-24 mt-5">
             <Button
               disabled={
-                (!(name &&
-                objective &&
-                numQuestions &&
-                duration &&
-                selectedInterviewer !== BigInt(0))) || isClicked
+                !(
+                  name &&
+                  objective &&
+                  numQuestions &&
+                  duration &&
+                  selectedInterviewer !== BigInt(0)
+                ) || isClicked
               }
               className="bg-indigo-600 hover:bg-indigo-800  w-40"
               onClick={() => {
@@ -324,11 +326,13 @@ function DetailsPopup({
             </Button>
             <Button
               disabled={
-                (!(name &&
-                objective &&
-                numQuestions &&
-                duration &&
-                selectedInterviewer !== BigInt(0))) || isClicked
+                !(
+                  name &&
+                  objective &&
+                  numQuestions &&
+                  duration &&
+                  selectedInterviewer !== BigInt(0)
+                ) || isClicked
               }
               className="bg-indigo-600 w-40 hover:bg-indigo-800"
               onClick={() => {

@@ -419,7 +419,9 @@ function Call({ interview }: InterviewProps) {
                 <div className="border-x-2 border-grey w-[50%] my-auto min-h-[70%]">
                   <div className="flex flex-col justify-evenly">
                     <div
-                      className={"text-[22px] w-[80%] md:text-[26px] mt-4 min-h-[250px] mx-auto px-6"}
+                      className={
+                        "text-[22px] w-[80%] md:text-[26px] mt-4 min-h-[250px] mx-auto px-6"
+                      }
                     >
                       {lastInterviewerResponse}
                     </div>
@@ -443,7 +445,9 @@ function Call({ interview }: InterviewProps) {
                 <div className="flex flex-col justify-evenly w-[50%]">
                   <div
                     ref={lastUserResponseRef}
-                    className={"text-[22px] w-[80%] md:text-[26px] mt-4 mx-auto h-[250px] px-6 overflow-y-auto"}
+                    className={
+                      "text-[22px] w-[80%] md:text-[26px] mt-4 mx-auto h-[250px] px-6 overflow-y-auto"
+                    }
                   >
                     {lastUserResponse}
                   </div>
@@ -562,7 +566,8 @@ function Call({ interview }: InterviewProps) {
         <a
           className="flex flex-row justify-center align-middle mt-3"
           href="https://folo-up.co/"
-          target="_blank" rel="noreferrer"
+          target="_blank"
+          rel="noreferrer"
         >
           <div className="text-center text-md font-semibold mr-2  ">
             Powered by{" "}
