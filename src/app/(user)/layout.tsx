@@ -8,6 +8,9 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
+  ),
   title: "FoloUp",
   description: "AI powered Interviews",
   openGraph: {
@@ -37,7 +40,7 @@ export default function RootLayout({
         <link rel="icon" href="/browser-user-icon.ico" />
       </head>
       <body className={inter.className}>
-        <ClerkProvider>
+        <ClerkProvider dynamic>
           <Providers>
             {children}
             <Toaster

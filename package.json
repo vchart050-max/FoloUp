@@ -13,8 +13,7 @@
     "check:ci": "biome check ."
   },
   "dependencies": {
-    "@clerk/clerk-js": "^4.65.5",
-    "@clerk/nextjs": "5.1.5",
+    "@clerk/nextjs": "^6.36.10",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
     "@hookform/resolvers": "^3.3.2",

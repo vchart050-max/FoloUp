@@ -37,6 +37,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const isAuthRoute =
+    pathname.includes("/sign-in") || pathname.includes("/sign-up");
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -52,19 +54,24 @@ export default function RootLayout({
         )}
       >
         <ClerkProvider
+          dynamic
           signInFallbackRedirectUrl={"/dashboard"}
           afterSignOutUrl={"/sign-in"}
         >
           <Providers>
-            {!pathname.includes("/sign-in") &&
-              !pathname.includes("/sign-up") && <Navbar />}
-            <div className="flex flex-row h-screen">
-              {!pathname.includes("/sign-in") &&
-                !pathname.includes("/sign-up") && <SideMenu />}
-              <div className="ml-[200px] pt-[64px] h-full overflow-y-auto flex-grow">
-                {children}
-              </div>
-            </div>
+            {isAuthRoute ? (
+              children
+            ) : (
+              <>
+                <Navbar />
+                <div className="flex flex-row h-screen">
+                  <SideMenu />
+                  <div className="ml-[200px] pt-[64px] h-full overflow-y-auto flex-grow">
+                    {children}
+                  </div>
+                </div>
+              </>
+            )}
             <Toaster
               toastOptions={{
                 classNames: {
