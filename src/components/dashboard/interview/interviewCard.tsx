@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner";
+import MiniLoader from "@/components/loaders/mini-loader/miniLoader";
 import { Button } from "@/components/ui/button";
-import { Copy, ArrowUpRight } from "lucide-react";
-import { CopyCheck } from "lucide-react";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { InterviewerService } from "@/services/interviewers.service";
 import { ResponseService } from "@/services/responses.service";
 import axios from "axios";
-import MiniLoader from "@/components/loaders/mini-loader/miniLoader";
-import { InterviewerService } from "@/services/interviewers.service";
+import { ArrowUpRight, Copy } from "lucide-react";
+import { CopyCheck } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
   name: string | null;
@@ -26,16 +26,17 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
   const [isFetching, setIsFetching] = useState(false);
   const [img, setImg] = useState("");
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const fetchInterviewer = async () => {
-      const interviewer =
-        await InterviewerService.getInterviewer(interviewerId);
+      const interviewer = await InterviewerService.getInterviewer(interviewerId);
       setImg(interviewer.image);
     };
     fetchInterviewer();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     const fetchResponses = async () => {
       try {
@@ -74,19 +75,14 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
 
   const copyToClipboard = () => {
     navigator.clipboard
-      .writeText(
-        readableSlug ? `${base_url}/call/${readableSlug}` : (url as string),
-      )
+      .writeText(readableSlug ? `${base_url}/call/${readableSlug}` : (url as string))
       .then(
         () => {
           setCopied(true);
-          toast.success(
-            "The link to your interview has been copied to your clipboard.",
-            {
-              position: "bottom-right",
-              duration: 3000,
-            },
-          );
+          toast.success("The link to your interview has been copied to your clipboard.", {
+            position: "bottom-right",
+            duration: 3000,
+          });
           setTimeout(() => {
             setCopied(false);
           }, 2000);
@@ -100,9 +96,7 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
   const handleJumpToInterview = (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    const interviewUrl = readableSlug
-      ? `/call/${readableSlug}`
-      : `/call/${url}`;
+    const interviewUrl = readableSlug ? `/call/${readableSlug}` : `/call/${url}`;
     window.open(interviewUrl, "_blank");
   };
 
@@ -137,10 +131,7 @@ function InterviewCard({ name, interviewerId, id, url, readableSlug }: Props) {
               />
             </div>
             <div className="text-black text-sm font-semibold mt-2 mr-2 whitespace-nowrap">
-              Responses:{" "}
-              <span className="font-normal">
-                {responseCount?.toString() || 0}
-              </span>
+              Responses: <span className="font-normal">{responseCount?.toString() || 0}</span>
             </div>
           </div>
           <div className="absolute top-2 right-2 flex gap-1">

@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Copy } from "lucide-react";
-import { toast } from "sonner";
 import Modal from "@/components/dashboard/Modal";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Copy } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 interface SharePopupProps {
   open: boolean;
@@ -35,13 +35,10 @@ function SharePopup({ open, onClose, shareContent }: SharePopupProps) {
     navigator.clipboard.writeText(url).then(
       () => {
         setCopiedLink(true);
-        toast.success(
-          "The link to your interview has been copied to your clipboard.",
-          {
-            position: "bottom-right",
-            duration: 3000,
-          },
-        );
+        toast.success("The link to your interview has been copied to your clipboard.", {
+          position: "bottom-right",
+          duration: 3000,
+        });
 
         setTimeout(() => setCopiedLink(false), 2000);
         setTimeout(() => onClose(), 1000);
@@ -55,13 +52,10 @@ function SharePopup({ open, onClose, shareContent }: SharePopupProps) {
     navigator.clipboard.writeText(embedCode).then(
       () => {
         setCopiedEmbed(true);
-        toast.success(
-          "The embed HTML code for your interview has been copied to your clipboard.",
-          {
-            position: "bottom-right",
-            duration: 3000,
-          },
-        );
+        toast.success("The embed HTML code for your interview has been copied to your clipboard.", {
+          position: "bottom-right",
+          duration: 3000,
+        });
 
         setTimeout(() => setCopiedEmbed(false), 2000);
         setTimeout(() => onClose(), 1000);
@@ -79,11 +73,7 @@ function SharePopup({ open, onClose, shareContent }: SharePopupProps) {
       <div className="w-[28rem] flex flex-col">
         <p className="text-lg font-semibold mb-4">Share via:</p>
         <div className="h-auto rounded-xl">
-          <Tabs
-            value={activeTab}
-            className="flex flex-col h-full"
-            onValueChange={setActiveTab}
-          >
+          <Tabs value={activeTab} className="flex flex-col h-full" onValueChange={setActiveTab}>
             <div className="w-auto">
               <TabsList>
                 {/* <TabsTrigger value="mail">Mail</TabsTrigger> */}
@@ -102,10 +92,7 @@ function SharePopup({ open, onClose, shareContent }: SharePopupProps) {
                     readOnly
                   />
                 </div>
-                <Button
-                  className="flex items-center bg-indigo-600"
-                  onClick={copyLinkToClipboard}
-                >
+                <Button className="flex items-center bg-indigo-600" onClick={copyLinkToClipboard}>
                   <Copy size={16} className="mr-2" />
                   {copiedLink ? "Copied" : "Copy URL"}
                 </Button>
@@ -157,10 +144,7 @@ function SharePopup({ open, onClose, shareContent }: SharePopupProps) {
                     />
                   </div>
                 </div>
-                <Button
-                  className="flex items-center bg-indigo-600"
-                  onClick={copyEmbedToClipboard}
-                >
+                <Button className="flex items-center bg-indigo-600" onClick={copyEmbedToClipboard}>
                   <Copy size={16} className="mr-2" />
                   {copiedEmbed ? "Copied" : "Copy Embed Code"}
                 </Button>

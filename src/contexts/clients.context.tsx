@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useContext, ReactNode, useEffect } from "react";
-import { User } from "@/types/user";
-import { useClerk, useOrganization } from "@clerk/nextjs";
 import { ClientService } from "@/services/clients.service";
+import type { User } from "@/types/user";
+import { useClerk, useOrganization } from "@clerk/nextjs";
+import React, { useState, useContext, type ReactNode, useEffect } from "react";
 
 interface ClientContextProps {
   client?: User;
@@ -52,6 +52,7 @@ export function ClientProvider({ children }: ClientProviderProps) {
     setClientLoading(false);
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (user?.id) {
       fetchClient();
@@ -59,6 +60,7 @@ export function ClientProvider({ children }: ClientProviderProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (organization?.id) {
       fetchOrganization();

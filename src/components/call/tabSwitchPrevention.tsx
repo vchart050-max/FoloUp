@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,6 +7,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import React, { useEffect, useState } from "react";
 
 const useTabSwitchPrevention = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -44,8 +44,7 @@ function TabSwitchWarning() {
         <AlertDialogHeader>
           <AlertDialogTitle>Warning: Tab Switching</AlertDialogTitle>
           <AlertDialogDescription>
-            Switching tabs may degrade your interview performance. Tab switching
-            is tracked.
+            Switching tabs may degrade your interview performance. Tab switching is tracked.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

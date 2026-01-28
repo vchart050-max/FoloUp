@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { InterviewerService } from "@/services/interviewers.service";
 import axios from "axios";
-import { Plus, Loader2 } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 
 function CreateInterviewerButton() {

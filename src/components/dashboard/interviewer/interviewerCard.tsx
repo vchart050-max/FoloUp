@@ -1,9 +1,9 @@
-import { useState } from "react";
-import Image from "next/image";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Modal from "@/components/dashboard/Modal";
-import { Interviewer } from "@/types/interviewer";
 import InterviewerDetailsModal from "@/components/dashboard/interviewer/interviewerDetailsModal";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import type { Interviewer } from "@/types/interviewer";
+import Image from "next/image";
+import { useState } from "react";
 
 interface Props {
   interviewer: Interviewer;
@@ -29,9 +29,7 @@ const interviewerCard = ({ interviewer }: Props) => {
               className="w-full h-full object-cover object-center"
             />
           </div>
-          <CardTitle className="mt-3 text-base text-center">
-            {interviewer.name}
-          </CardTitle>
+          <CardTitle className="mt-3 text-base text-center">{interviewer.name}</CardTitle>
         </CardContent>
       </Card>
       <Modal

@@ -1,14 +1,14 @@
 "use client";
 
 import "../globals.css";
-import { Inter } from "next/font/google";
-import { cn } from "@/lib/utils";
 import Navbar from "@/components/navbar";
 import Providers from "@/components/providers";
-import { ClerkProvider } from "@clerk/nextjs";
-import { Toaster } from "sonner";
 import SideMenu from "@/components/sideMenu";
+import { cn } from "@/lib/utils";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Inter } from "next/font/google";
 import { usePathname } from "next/navigation";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,34 +37,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const isAuthRoute = pathname.includes("/sign-in") || pathname.includes("/sign-up");
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
         <link rel="icon" href="/browser-client-icon.ico" />
       </head>
-      <body
-        className={cn(
-          inter.className,
-          "antialiased overflow-hidden min-h-screen",
-        )}
-      >
+      <body className={cn(inter.className, "antialiased overflow-hidden min-h-screen")}>
         <ClerkProvider
+          dynamic
           signInFallbackRedirectUrl={"/dashboard"}
           afterSignOutUrl={"/sign-in"}
         >
           <Providers>
-            {!pathname.includes("/sign-in") &&
-              !pathname.includes("/sign-up") && <Navbar />}
-            <div className="flex flex-row h-screen">
-              {!pathname.includes("/sign-in") &&
-                !pathname.includes("/sign-up") && <SideMenu />}
-              <div className="ml-[200px] pt-[64px] h-full overflow-y-auto flex-grow">
-                {children}
-              </div>
-            </div>
+            {isAuthRoute ? (
+              children
+            ) : (
+              <>
+                <Navbar />
+                <div className="flex flex-row h-screen">
+                  <SideMenu />
+                  <div className="ml-[200px] pt-[64px] h-full overflow-y-auto flex-grow">
+                    {children}
+                  </div>
+                </div>
+              </>
+            )}
             <Toaster
               toastOptions={{
                 classNames: {

@@ -1,8 +1,8 @@
+import { INTERVIEWERS, RETELL_AGENT_GENERAL_PROMPT } from "@/lib/constants";
 import { logger } from "@/lib/logger";
 import { InterviewerService } from "@/services/interviewers.service";
-import { NextResponse, NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import Retell from "retell-sdk";
-import { INTERVIEWERS, RETELL_AGENT_GENERAL_PROMPT } from "@/lib/constants";
 
 const retellClient = new Retell({
   apiKey: process.env.RETELL_API_KEY || "",
@@ -61,9 +61,6 @@ export async function GET(res: NextRequest) {
   } catch (error) {
     logger.error("Error creating interviewers:");
 
-    return NextResponse.json(
-      { error: "Failed to create interviewers" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to create interviewers" }, { status: 500 });
   }
 }

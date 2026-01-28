@@ -1,6 +1,6 @@
+import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
-import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 
 function Navbar() {
   return (

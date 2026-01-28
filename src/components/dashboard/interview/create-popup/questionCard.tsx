@@ -1,13 +1,8 @@
-import { Question } from "@/types/interview";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import type { Question } from "@/types/interview";
 import { Trash2 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 interface QuestionCardProps {
   questionNumber: number;
@@ -35,9 +30,7 @@ const questionCard = ({
                   <TooltipTrigger asChild>
                     <Button
                       className={`text-xs h-7  hover:bg-indigo-800  ${
-                        questionData?.follow_up_count == 1
-                          ? "bg-indigo-600"
-                          : "opacity-50"
+                        questionData?.follow_up_count === 1 ? "bg-indigo-600" : "opacity-50"
                       } `}
                       onClick={() =>
                         onQuestionChange(questionData.id, {
@@ -60,9 +53,7 @@ const questionCard = ({
                   <TooltipTrigger asChild>
                     <Button
                       className={`text-xs h-7  hover:bg-indigo-800 ${
-                        questionData?.follow_up_count == 2
-                          ? "bg-indigo-600"
-                          : "opacity-50"
+                        questionData?.follow_up_count === 2 ? "bg-indigo-600" : "opacity-50"
                       } `}
                       onClick={() =>
                         onQuestionChange(questionData.id, {
@@ -85,9 +76,7 @@ const questionCard = ({
                   <TooltipTrigger asChild>
                     <Button
                       className={`text-xs h-7 hover:bg-indigo-800  ${
-                        questionData?.follow_up_count == 3
-                          ? "bg-indigo-600"
-                          : "opacity-50"
+                        questionData?.follow_up_count === 3 ? "bg-indigo-600" : "opacity-50"
                       } `}
                       onClick={() =>
                         onQuestionChange(questionData.id, {

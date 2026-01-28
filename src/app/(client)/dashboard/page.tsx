@@ -1,25 +1,24 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useOrganization } from "@clerk/nextjs";
-import InterviewCard from "@/components/dashboard/interview/interviewCard";
-import CreateInterviewCard from "@/components/dashboard/interview/createInterviewCard";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import { InterviewService } from "@/services/interviews.service";
-import { ClientService } from "@/services/clients.service";
-import { ResponseService } from "@/services/responses.service";
-import { useInterviews } from "@/contexts/interviews.context";
 import Modal from "@/components/dashboard/Modal";
+import CreateInterviewCard from "@/components/dashboard/interview/createInterviewCard";
+import InterviewCard from "@/components/dashboard/interview/interviewCard";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { useInterviews } from "@/contexts/interviews.context";
+import { ClientService } from "@/services/clients.service";
+import { InterviewService } from "@/services/interviews.service";
+import { ResponseService } from "@/services/responses.service";
+import { useOrganization } from "@clerk/nextjs";
 import { Gem, Plus } from "lucide-react";
 import Image from "next/image";
+import React, { useState, useEffect } from "react";
 
 function Interviews() {
   const { interviews, interviewsLoading } = useInterviews();
   const { organization } = useOrganization();
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPlan, setCurrentPlan] = useState<string>("");
-  const [allowedResponsesCount, setAllowedResponsesCount] =
-    useState<number>(10);
+  const [allowedResponsesCount, setAllowedResponsesCount] = useState<number>(10);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   function InterviewsLoader() {
@@ -65,18 +64,14 @@ function Interviews() {
 
       setLoading(true);
       try {
-        const totalResponses =
-          await ResponseService.getResponseCountByOrganizationId(
-            organization.id,
-          );
+        const totalResponses = await ResponseService.getResponseCountByOrganizationId(
+          organization.id,
+        );
         const hasExceededLimit = totalResponses >= allowedResponsesCount;
         if (hasExceededLimit) {
           setCurrentPlan("free_trial_over");
           await InterviewService.deactivateInterviewsByOrgId(organization.id);
-          await ClientService.updateOrganization(
-            { plan: "free_trial_over" },
-            organization.id,
-          );
+          await ClientService.updateOrganization({ plan: "free_trial_over" }, organization.id);
         }
       } catch (error) {
         console.error("Error fetching responses:", error);
@@ -91,14 +86,12 @@ function Interviews() {
   return (
     <main className="p-8 pt-0 ml-12 mr-auto rounded-md">
       <div className="flex flex-col items-left">
-        <h2 className="mr-2 text-2xl font-semibold tracking-tight mt-8">
-          My Interviews
-        </h2>
+        <h2 className="mr-2 text-2xl font-semibold tracking-tight mt-8">My Interviews</h2>
         <h3 className=" text-sm tracking-tight text-gray-600 font-medium ">
           Start getting responses now!
         </h3>
         <div className="relative flex items-center mt-1 flex-wrap">
-          {currentPlan == "free_trial_over" ? (
+          {currentPlan === "free_trial_over" ? (
             <Card className=" flex bg-gray-200 items-center border-dashed border-gray-700 border-2 hover:scale-105 ease-in-out duration-300 h-60 w-56 ml-1 mr-3 mt-4 rounded-xl shrink-0 overflow-hidden shadow-md">
               <CardContent className="flex items-center flex-col mx-auto">
                 <div className="flex flex-col justify-center items-center w-full overflow-hidden">
@@ -122,12 +115,10 @@ function Interviews() {
                     <div className="flex justify-center text-indigo-600">
                       <Gem />
                     </div>
-                    <h3 className="text-xl font-semibold text-center">
-                      Upgrade to Pro
-                    </h3>
+                    <h3 className="text-xl font-semibold text-center">Upgrade to Pro</h3>
                     <p className="text-l text-center">
-                      You have reached your limit for the free trial. Please
-                      upgrade to pro to continue using our features.
+                      You have reached your limit for the free trial. Please upgrade to pro to
+                      continue using our features.
                     </p>
                     <div className="grid grid-cols-2 gap-2">
                       <div className="flex justify-center items-center">
@@ -159,9 +150,8 @@ function Interviews() {
                       </div>
                     </div>
                     <p className="text-l text-center">
-                      Contact{" "}
-                      <span className="font-semibold">founders@folo-up.co</span>{" "}
-                      to upgrade your plan.
+                      Contact <span className="font-semibold">founders@folo-up.co</span> to upgrade
+                      your plan.
                     </p>
                   </div>
                 </Modal>

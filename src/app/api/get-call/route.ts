@@ -1,7 +1,7 @@
 import { logger } from "@/lib/logger";
 import { generateInterviewAnalytics } from "@/services/analytics.service";
 import { ResponseService } from "@/services/responses.service";
-import { Response } from "@/types/response";
+import type { Response } from "@/types/response";
 import { NextResponse } from "next/server";
 import Retell from "retell-sdk";
 
@@ -9,13 +9,11 @@ const retell = new Retell({
   apiKey: process.env.RETELL_API_KEY || "",
 });
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   logger.info("get-call request received");
   const body = await req.json();
 
-  const callDetails: Response = await ResponseService.getResponseByCallId(
-    body.id,
-  );
+  const callDetails: Response = await ResponseService.getResponseByCallId(body.id);
   let callResponse = callDetails.details;
   if (callDetails.is_analysed) {
     return NextResponse.json(

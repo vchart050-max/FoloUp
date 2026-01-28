@@ -1,14 +1,11 @@
-import { OpenAI } from "openai";
-import { NextResponse } from "next/server";
-import { ResponseService } from "@/services/responses.service";
-import { InterviewService } from "@/services/interviews.service";
-import {
-  SYSTEM_PROMPT,
-  createUserPrompt,
-} from "@/lib/prompts/generate-insights";
 import { logger } from "@/lib/logger";
+import { SYSTEM_PROMPT, createUserPrompt } from "@/lib/prompts/generate-insights";
+import { InterviewService } from "@/services/interviews.service";
+import { ResponseService } from "@/services/responses.service";
+import { NextResponse } from "next/server";
+import { OpenAI } from "openai";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   logger.info("generate-insights request received");
   const body = await req.json();
 
@@ -17,9 +14,9 @@ export async function POST(req: Request, res: Response) {
 
   let callSummaries = "";
   if (responses) {
-    responses.forEach((response) => {
+    for (const response of responses) {
       callSummaries += response.details?.call_analysis?.call_summary;
-    });
+    }
   }
 
   const openai = new OpenAI({
@@ -71,9 +68,6 @@ export async function POST(req: Request, res: Response) {
   } catch (error) {
     logger.error("Error generating insights");
 
-    return NextResponse.json(
-      { error: "internal server error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "internal server error" }, { status: 500 });
   }
 }

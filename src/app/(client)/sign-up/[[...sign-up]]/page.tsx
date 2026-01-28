@@ -14,8 +14,7 @@ function SignUpPage() {
           Mobile version is currently under construction. 🚧
         </h1>
         <p className="text-center text-gray-600 mt-3">
-          Please sign in using a PC for the best experience. Sorry for the
-          inconvenience.
+          Please sign in using a PC for the best experience. Sorry for the inconvenience.
         </p>
       </div>
     </div>

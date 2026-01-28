@@ -1,17 +1,17 @@
 "use client";
 
-import { useInterviews } from "@/contexts/interviews.context";
-import { useEffect, useState } from "react";
 import Call from "@/components/call";
-import Image from "next/image";
-import { ArrowUpRightSquareIcon } from "lucide-react";
-import { Interview } from "@/types/interview";
 import LoaderWithText from "@/components/loaders/loader-with-text/loaderWithText";
+import { useInterviews } from "@/contexts/interviews.context";
+import type { Interview } from "@/types/interview";
+import { ArrowUpRightSquareIcon } from "lucide-react";
+import Image from "next/image";
+import { use, useEffect, useState } from "react";
 
 type Props = {
-  params: {
+  params: Promise<{
     interviewId: string;
-  };
+  }>;
 };
 
 type PopupProps = {
@@ -51,13 +51,7 @@ function PopUpMessage({ title, description, image }: PopupProps) {
     <div className="bg-white rounded-md absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 md:w-[80%] w-[90%]">
       <div className="h-[88vh] content-center rounded-lg border-2 border-b-4 border-r-4 border-black font-bold transition-all  md:block dark:border-white ">
         <div className="flex flex-col items-center justify-center my-auto">
-          <Image
-            src={image}
-            alt="Graphic"
-            width={200}
-            height={200}
-            className="mb-4"
-          />
+          <Image src={image} alt="Graphic" width={200} height={200} className="mb-4" />
           <h1 className="text-md font-medium mb-2">{title}</h1>
           <p>{description}</p>
         </div>
@@ -81,6 +75,7 @@ function PopUpMessage({ title, description, image }: PopupProps) {
 }
 
 function InterviewInterface({ params }: Props) {
+  const resolvedParams = use(params);
   const [interview, setInterview] = useState<Interview>();
   const [isActive, setIsActive] = useState(true);
   const { getInterviewById } = useInterviews();
@@ -89,12 +84,12 @@ function InterviewInterface({ params }: Props) {
     if (interview) {
       setIsActive(interview?.is_active === true);
     }
-  }, [interview, params.interviewId]);
+  }, [interview]);
 
   useEffect(() => {
     const fetchinterview = async () => {
       try {
-        const response = await getInterviewById(params.interviewId);
+        const response = await getInterviewById(resolvedParams.interviewId);
         if (response) {
           setInterview(response);
           document.title = response.name;
@@ -108,8 +103,7 @@ function InterviewInterface({ params }: Props) {
     };
 
     fetchinterview();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [getInterviewById, resolvedParams.interviewId]);
 
   return (
     <div>
@@ -136,21 +130,14 @@ function InterviewInterface({ params }: Props) {
       </div>
       <div className=" md:hidden flex flex-col items-center md:h-[0px] justify-center  my-auto">
         <div className="mt-48 px-3">
-          <p className="text-center my-5 text-md font-semibold">
-            {interview?.name}
-          </p>
+          <p className="text-center my-5 text-md font-semibold">{interview?.name}</p>
           <p className="text-center text-gray-600 my-5">
-            Please use a PC to respond to the interview. Apologies for any
-            inconvenience caused.{" "}
+            Please use a PC to respond to the interview. Apologies for any inconvenience caused.{" "}
           </p>
         </div>
         <div className="text-center text-md font-semibold mr-2 my-5">
           Powered by{" "}
-          <a
-            className="font-bold underline"
-            href="www.folo-up.co"
-            target="_blank"
-          >
+          <a className="font-bold underline" href="www.folo-up.co" target="_blank" rel="noreferrer">
             Folo<span className="text-indigo-600">Up</span>
           </a>
         </div>

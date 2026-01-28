@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import { v4 as uuidv4 } from "uuid";
-import { useClerk, useOrganization } from "@clerk/nextjs";
-import { InterviewBase, Question } from "@/types/interview";
-import { useInterviews } from "@/contexts/interviews.context";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import QuestionCard from "@/components/dashboard/interview/create-popup/questionCard";
 import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useInterviews } from "@/contexts/interviews.context";
+import type { InterviewBase, Question } from "@/types/interview";
+import { useClerk, useOrganization } from "@clerk/nextjs";
+import axios from "axios";
 import { Plus } from "lucide-react";
 import { ChevronLeft } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 
 interface Props {
   interviewData: InterviewBase;
@@ -21,12 +21,8 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
   const { organization } = useOrganization();
   const [isClicked, setIsClicked] = useState(false);
 
-  const [questions, setQuestions] = useState<Question[]>(
-    interviewData.questions,
-  );
-  const [description, setDescription] = useState<string>(
-    interviewData.description.trim(),
-  );
+  const [questions, setQuestions] = useState<Question[]>(interviewData.questions);
+  const [description, setDescription] = useState<string>(interviewData.description.trim());
   const { fetchInterviews } = useInterviews();
 
   const endOfListRef = useRef<HTMLDivElement>(null);
@@ -57,10 +53,7 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
 
   const handleAddQuestion = () => {
     if (questions.length < interviewData.question_count) {
-      setQuestions([
-        ...questions,
-        { id: uuidv4(), question: "", follow_up_count: 1 },
-      ]);
+      setQuestions([...questions, { id: uuidv4(), question: "", follow_up_count: 1 }]);
     }
   };
 
@@ -117,8 +110,7 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
           <h1 className="text-2xl font-semibold">Create Interview</h1>
         </div>
         <div className="my-3 text-left w-[96%] text-sm">
-          We will be using these questions during the interviews. Please make
-          sure they are ok.
+          We will be using these questions during the interviews. Please make sure they are ok.
         </div>
         <ScrollArea className="flex flex-col justify-center items-center w-full mt-3">
           {questions.map((question, index) => (
@@ -133,16 +125,13 @@ function QuestionsPopup({ interviewData, setProceed, setOpen }: Props) {
           <div ref={endOfListRef} />
         </ScrollArea>
         {questions.length < interviewData.question_count ? (
-          <div
-            className="border-indigo-600 opacity-75 hover:opacity-100 w-fit  rounded-full"
+          <button
+            type="button"
+            className="border-indigo-600 opacity-75 hover:opacity-100 w-fit rounded-full"
             onClick={handleAddQuestion}
           >
-            <Plus
-              size={45}
-              strokeWidth={2.2}
-              className="text-indigo-600  cursor-pointer"
-            />
-          </div>
+            <Plus size={45} strokeWidth={2.2} className="text-indigo-600 cursor-pointer" />
+          </button>
         ) : (
           <></>
         )}

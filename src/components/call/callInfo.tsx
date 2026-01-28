@@ -1,21 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Analytics, CallData } from "@/types/response";
-import axios from "axios";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
-import ReactAudioPlayer from "react-audio-player";
-import { DownloadIcon, TrashIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
-import { ResponseService } from "@/services/responses.service";
-import { useRouter } from "next/navigation";
-import LoaderWithText from "@/components/loaders/loader-with-text/loaderWithText";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
-import { CircularProgress } from "@nextui-org/react";
 import QuestionAnswerCard from "@/components/dashboard/interview/questionAnswerCard";
-import { marked } from "marked";
+import LoaderWithText from "@/components/loaders/loader-with-text/loaderWithText";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,6 +13,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -34,8 +22,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { CandidateStatus } from "@/lib/enum";
+import { ResponseService } from "@/services/responses.service";
+import type { Analytics, CallData } from "@/types/response";
+import { CircularProgress } from "@nextui-org/react";
+import { ScrollArea } from "@radix-ui/react-scroll-area";
+import axios from "axios";
+import { DownloadIcon, TrashIcon } from "lucide-react";
 import { ArrowLeft } from "lucide-react";
+import { marked } from "marked";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import ReactAudioPlayer from "react-audio-player";
+import { toast } from "sonner";
 
 type CallProps = {
   call_id: string;
@@ -43,11 +43,7 @@ type CallProps = {
   onCandidateStatusChange: (callId: string, newStatus: string) => void;
 };
 
-function CallInfo({
-  call_id,
-  onDeleteResponse,
-  onCandidateStatusChange,
-}: CallProps) {
+function CallInfo({ call_id, onDeleteResponse, onCandidateStatusChange }: CallProps) {
   const [call, setCall] = useState<CallData>();
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [email, setEmail] = useState<string>("");
@@ -169,15 +165,16 @@ function CallInfo({
               </p> */}
               <div>
                 <div className="flex justify-between items-center pb-4 pr-2">
-                  <div
-                    className=" inline-flex items-center text-indigo-600 hover:cursor-pointer"
+                  <button
+                    type="button"
+                    className="inline-flex items-center text-indigo-600 hover:cursor-pointer"
                     onClick={() => {
                       router.push(`/interviews/${interviewId}`);
                     }}
                   >
                     <ArrowLeft className="mr-2" />
                     <p className="text-sm font-semibold">Back to Summary</p>
-                  </div>
+                  </button>
                   {tabSwitchCount && tabSwitchCount > 0 && (
                     <p className="text-sm font-semibold text-red-500 bg-red-200 rounded-sm px-2 py-1">
                       Tab Switching Detected
@@ -192,9 +189,7 @@ function CallInfo({
                       <AvatarFallback>{name ? name[0] : "A"}</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col">
-                      {name && (
-                        <p className="text-sm font-semibold px-2">{name}</p>
-                      )}
+                      {name && <p className="text-sm font-semibold px-2">{name}</p>}
                       {email && <p className="text-sm px-2">{email}</p>}
                     </div>
                   </div>
@@ -242,10 +237,7 @@ function CallInfo({
                     </Select>
                     <AlertDialog>
                       <AlertDialogTrigger>
-                        <Button
-                          disabled={isClicked}
-                          className="bg-red-500 hover:bg-red-600 p-2"
-                        >
+                        <Button disabled={isClicked} className="bg-red-500 hover:bg-red-600 p-2">
                           <TrashIcon size={16} className="" />
                         </Button>
                       </AlertDialogTrigger>
@@ -255,8 +247,8 @@ function CallInfo({
                           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
 
                           <AlertDialogDescription>
-                            This action cannot be undone. This will permanently
-                            delete this response.
+                            This action cannot be undone. This will permanently delete this
+                            response.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
 
@@ -279,9 +271,7 @@ function CallInfo({
                 <div className="flex flex-col mt-3">
                   <p className="font-semibold">Interview Recording</p>
                   <div className="flex flex-row gap-3 mt-2">
-                    {call?.recording_url && (
-                      <ReactAudioPlayer src={call?.recording_url} controls />
-                    )}
+                    {call?.recording_url && <ReactAudioPlayer src={call?.recording_url} controls />}
                     <a
                       className="my-auto"
                       href={call?.recording_url}
@@ -315,9 +305,7 @@ function CallInfo({
                       showValueLabel={true}
                       formatOptions={{ signDisplay: "never" }}
                     />
-                    <p className="font-medium my-auto text-xl">
-                      Overall Hiring Score
-                    </p>
+                    <p className="font-medium my-auto text-xl">Overall Hiring Score</p>
                   </div>
                   <div className="">
                     <div className="font-medium ">
@@ -381,11 +369,11 @@ function CallInfo({
 
                   <div
                     className={`${
-                      call?.call_analysis?.user_sentiment == "Neutral"
+                      call?.call_analysis?.user_sentiment === "Neutral"
                         ? "text-yellow-500"
-                        : call?.call_analysis?.user_sentiment == "Negative"
+                        : call?.call_analysis?.user_sentiment === "Negative"
                           ? "text-red-500"
-                          : call?.call_analysis?.user_sentiment == "Positive"
+                          : call?.call_analysis?.user_sentiment === "Positive"
                             ? "text-green-500"
                             : "text-transparent"
                     } text-xl`}
@@ -403,35 +391,31 @@ function CallInfo({
                     )}
                   </div>
                 </div>
-                <p className="font-medium ">
-                  {call?.call_analysis?.call_completion_rating_reason}
-                </p>
+                <p className="font-medium ">{call?.call_analysis?.call_completion_rating_reason}</p>
               </div>
             </div>
           </div>
-          {analytics &&
-            analytics.questionSummaries &&
-            analytics.questionSummaries.length > 0 && (
-              <div className="bg-slate-200 rounded-2xl min-h-[120px] p-4 px-5 my-3">
-                <p className="font-semibold my-2 mb-4">Question Summary</p>
-                <ScrollArea className="rounded-md h-72 text-sm mt-3 py-3 leading-6 overflow-y-scroll whitespace-pre-line px-2">
-                  {analytics?.questionSummaries.map((qs, index) => (
-                    <QuestionAnswerCard
-                      key={qs.question}
-                      questionNumber={index + 1}
-                      question={qs.question}
-                      answer={qs.summary}
-                    />
-                  ))}
-                </ScrollArea>
-              </div>
-            )}
+          {analytics?.questionSummaries && analytics.questionSummaries.length > 0 && (
+            <div className="bg-slate-200 rounded-2xl min-h-[120px] p-4 px-5 my-3">
+              <p className="font-semibold my-2 mb-4">Question Summary</p>
+              <ScrollArea className="rounded-md h-72 text-sm mt-3 py-3 leading-6 overflow-y-scroll whitespace-pre-line px-2">
+                {analytics?.questionSummaries.map((qs, index) => (
+                  <QuestionAnswerCard
+                    key={qs.question}
+                    questionNumber={index + 1}
+                    question={qs.question}
+                    answer={qs.summary}
+                  />
+                ))}
+              </ScrollArea>
+            </div>
+          )}
           <div className="bg-slate-200 rounded-2xl min-h-[150px] max-h-[500px] p-4 px-5 mb-[150px]">
             <p className="font-semibold my-2 mb-4">Transcript</p>
             <ScrollArea className="rounded-2xl text-sm h-96  overflow-y-auto whitespace-pre-line px-2">
               <div
                 className="text-sm p-4 rounded-2xl leading-5 bg-slate-50"
-                // eslint-disable-next-line react/no-danger
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: required for markdown rendering
                 dangerouslySetInnerHTML={{ __html: marked(transcript) }}
               />
             </ScrollArea>

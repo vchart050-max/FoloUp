@@ -22,10 +22,7 @@ const getClientById = async (
   organization_id?: string | null,
 ) => {
   try {
-    const { data, error } = await supabase
-      .from("user")
-      .select(`*`)
-      .filter("id", "eq", id);
+    const { data, error } = await supabase.from("user").select("*").filter("id", "eq", id);
 
     if (!data || (data.length === 0 && email)) {
       const { error, data } = await supabase
@@ -64,14 +61,11 @@ const getClientById = async (
   }
 };
 
-const getOrganizationById = async (
-  organization_id?: string,
-  organization_name?: string,
-) => {
+const getOrganizationById = async (organization_id?: string, organization_name?: string) => {
   try {
     const { data, error } = await supabase
       .from("organization")
-      .select(`*`)
+      .select("*")
       .filter("id", "eq", organization_id);
 
     if (!data || data.length === 0) {

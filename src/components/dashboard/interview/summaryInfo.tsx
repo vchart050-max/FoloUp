@@ -1,25 +1,18 @@
 "use client";
 
-import { Interview } from "@/types/interview";
-import { Interviewer } from "@/types/interviewer";
-import { Response } from "@/types/response";
-import React, { useEffect, useState } from "react";
-import { UserCircleIcon, SmileIcon, Info } from "lucide-react";
+import DataTable, { type TableData } from "@/components/dashboard/interview/dataTable";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useInterviewers } from "@/contexts/interviewers.context";
-import { PieChart } from "@mui/x-charts/PieChart";
 import { CandidateStatus } from "@/lib/enum";
 import { convertSecondstoMMSS } from "@/lib/utils";
+import type { Interview } from "@/types/interview";
+import type { Interviewer } from "@/types/interviewer";
+import type { Response } from "@/types/response";
+import { PieChart } from "@mui/x-charts/PieChart";
+import { Info, SmileIcon, UserCircleIcon } from "lucide-react";
 import Image from "next/image";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
-import DataTable, {
-  TableData,
-} from "@/components/dashboard/interview/dataTable";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import React, { useEffect, useState } from "react";
 
 type SummaryProps = {
   responses: Response[];
@@ -94,6 +87,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
     setInterviewer(interviewer);
   }, [interviewers, interview]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!responses) {
       return;
@@ -121,7 +115,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
       [CandidateStatus.SELECTED]: 0,
     };
 
-    responses.forEach((response) => {
+    for (const response of responses) {
       const sentiment = response.details?.call_analysis?.user_sentiment;
       if (sentiment === "Positive") {
         sentimentCounter.positive += 1;
@@ -131,8 +125,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
         sentimentCounter.neutral += 1;
       }
 
-      const callCompletion =
-        response.details?.call_analysis?.call_completion_rating;
+      const callCompletion = response.details?.call_analysis?.call_completion_rating;
       if (callCompletion === "Complete") {
         callCompletionCounter.complete += 1;
       } else if (callCompletion === "Incomplete") {
@@ -141,24 +134,16 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
         callCompletionCounter.partial += 1;
       }
 
-      const agentTaskCompletion =
-        response.details?.call_analysis?.agent_task_completion_rating;
-      if (
-        agentTaskCompletion === "Complete" ||
-        agentTaskCompletion === "Partial"
-      ) {
+      const agentTaskCompletion = response.details?.call_analysis?.agent_task_completion_rating;
+      if (agentTaskCompletion === "Complete" || agentTaskCompletion === "Partial") {
         completedCount += 1;
       }
 
       totalDuration += response.duration;
-      if (
-        Object.values(CandidateStatus).includes(
-          response.candidate_status as CandidateStatus,
-        )
-      ) {
+      if (Object.values(CandidateStatus).includes(response.candidate_status as CandidateStatus)) {
         statusCounter[response.candidate_status as CandidateStatus]++;
       }
-    });
+    }
 
     setSentimentCount(sentimentCounter);
     setCallCompletion(callCompletionCounter);
@@ -179,13 +164,11 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
               <p className="font-semibold my-2">Overall Analysis</p>
             </div>
             <p className="text-sm">
-              Interviewer used:{" "}
-              <span className="font-medium">{interviewer?.name}</span>
+              Interviewer used: <span className="font-medium">{interviewer?.name}</span>
             </p>
           </div>
           <p className="my-3 ml-2 text-sm">
-            Interview Description:{" "}
-            <span className="font-medium">{interview?.description}</span>
+            Interview Description: <span className="font-medium">{interview?.description}</span>
           </p>
           <div className="flex flex-col gap-1 my-2 mt-4 mx-2 p-4 rounded-2xl bg-slate-50 shadow-md">
             <ScrollArea className="h-[250px]">
@@ -211,10 +194,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
                   <InfoTooltip content="Percentage of interviews completed successfully" />
                 </div>
                 <p className="w-fit text-2xl font-semibold text-indigo-600  p-1 px-2 bg-indigo-100 rounded-md">
-                  {Math.round(
-                    (completedInterviews / responses.length) * 10000,
-                  ) / 100}
-                  %
+                  {Math.round((completedInterviews / responses.length) * 10000) / 100}%
                 </p>
               </div>
             </div>
@@ -270,9 +250,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
                 Candidate Status
                 <InfoTooltip content="Breakdown of the candidate selection status" />
               </div>
-              <div className="text-sm text-center mb-1">
-                Total Responses: {totalResponses}
-              </div>
+              <div className="text-sm text-center mb-1">Total Responses: {totalResponses}</div>
               <PieChart
                 sx={{
                   "& .MuiChartsLegend-series text": {
@@ -296,8 +274,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
                       },
                       {
                         id: 2,
-                        value:
-                          candidateStatusCount[CandidateStatus.NOT_SELECTED],
+                        value: candidateStatusCount[CandidateStatus.NOT_SELECTED],
                         label: `Not Selected (${candidateStatusCount[CandidateStatus.NOT_SELECTED]})`,
                         color: "#eb4444",
                       },
@@ -336,15 +313,8 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
       ) : (
         <div className="w-[85%] h-[60%] flex flex-col items-center justify-center">
           <div className="flex flex-col items-center">
-            <Image
-              src="/no-responses.png"
-              alt="logo"
-              width={270}
-              height={270}
-            />
-            <p className="text-center text-sm mt-0">
-              Please share with your intended respondents
-            </p>
+            <Image src="/no-responses.png" alt="logo" width={270} height={270} />
+            <p className="text-center text-sm mt-0">Please share with your intended respondents</p>
           </div>
         </div>
       )}

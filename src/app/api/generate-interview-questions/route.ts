@@ -1,14 +1,11 @@
-import { OpenAI } from "openai";
-import { NextResponse } from "next/server";
-import {
-  SYSTEM_PROMPT,
-  generateQuestionsPrompt,
-} from "@/lib/prompts/generate-questions";
 import { logger } from "@/lib/logger";
+import { SYSTEM_PROMPT, generateQuestionsPrompt } from "@/lib/prompts/generate-questions";
+import { NextResponse } from "next/server";
+import { OpenAI } from "openai";
 
 export const maxDuration = 60;
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   logger.info("generate-interview-questions request received");
   const body = await req.json();
 
@@ -48,9 +45,6 @@ export async function POST(req: Request, res: Response) {
   } catch (error) {
     logger.error("Error generating interview questions");
 
-    return NextResponse.json(
-      { error: "internal server error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "internal server error" }, { status: 500 });
   }
 }

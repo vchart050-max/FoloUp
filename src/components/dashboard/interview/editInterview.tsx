@@ -1,21 +1,6 @@
 "use client";
 
-import { Interview, Question } from "@/types/interview";
-import React, { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { Plus, SaveIcon, TrashIcon } from "lucide-react";
-import { useInterviewers } from "@/contexts/interviewers.context";
 import QuestionCard from "@/components/dashboard/interview/create-popup/questionCard";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { useInterviews } from "@/contexts/interviews.context";
-import { InterviewService } from "@/services/interviews.service";
-import { CardTitle } from "../../ui/card";
-import Image from "next/image";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,6 +12,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Switch } from "@/components/ui/switch";
+import { useInterviewers } from "@/contexts/interviewers.context";
+import { useInterviews } from "@/contexts/interviews.context";
+import { InterviewService } from "@/services/interviews.service";
+import type { Interview, Question } from "@/types/interview";
+import { Plus, SaveIcon, TrashIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
+import { CardTitle } from "../../ui/card";
 
 type EditInterviewProps = {
   interview: Interview | undefined;
@@ -36,27 +36,13 @@ function EditInterview({ interview }: EditInterviewProps) {
   const { interviewers } = useInterviewers();
   const { fetchInterviews } = useInterviews();
 
-  const [description, setDescription] = useState<string>(
-    interview?.description || "",
-  );
-  const [objective, setObjective] = useState<string>(
-    interview?.objective || "",
-  );
-  const [numQuestions, setNumQuestions] = useState<number>(
-    interview?.question_count || 1,
-  );
-  const [duration, setDuration] = useState<Number>(
-    Number(interview?.time_duration),
-  );
-  const [questions, setQuestions] = useState<Question[]>(
-    interview?.questions || [],
-  );
-  const [selectedInterviewer, setSelectedInterviewer] = useState(
-    interview?.interviewer_id,
-  );
-  const [isAnonymous, setIsAnonymous] = useState<boolean>(
-    interview?.is_anonymous || false,
-  );
+  const [description, setDescription] = useState<string>(interview?.description || "");
+  const [objective, setObjective] = useState<string>(interview?.objective || "");
+  const [numQuestions, setNumQuestions] = useState<number>(interview?.question_count || 1);
+  const [duration, setDuration] = useState<number>(Number(interview?.time_duration));
+  const [questions, setQuestions] = useState<Question[]>(interview?.questions || []);
+  const [selectedInterviewer, setSelectedInterviewer] = useState(interview?.interviewer_id);
+  const [isAnonymous, setIsAnonymous] = useState<boolean>(interview?.is_anonymous || false);
 
   const [isClicked, setIsClicked] = useState(false);
 
@@ -90,16 +76,12 @@ function EditInterview({ interview }: EditInterviewProps) {
 
   const handleAddQuestion = () => {
     if (questions.length < numQuestions) {
-      setQuestions([
-        ...questions,
-        { id: uuidv4(), question: "", follow_up_count: 1 },
-      ]);
+      setQuestions([...questions, { id: uuidv4(), question: "", follow_up_count: 1 }]);
     }
   };
 
   const onSave = async () => {
-    const questionCount =
-      questions.length < numQuestions ? questions.length : numQuestions;
+    const questionCount = questions.length < numQuestions ? questions.length : numQuestions;
 
     const interviewData = {
       objective: objective,
@@ -115,10 +97,7 @@ function EditInterview({ interview }: EditInterviewProps) {
       if (!interview) {
         return;
       }
-      const response = await InterviewService.updateInterview(
-        interviewData,
-        interview?.id,
-      );
+      const response = await InterviewService.updateInterview(interviewData, interview?.id);
       setIsClicked(false);
       fetchInterviews();
       toast.success("Interview updated successfully.", {
@@ -159,7 +138,8 @@ function EditInterview({ interview }: EditInterviewProps) {
     <div className=" h-screen z-[10] mx-2">
       <div className="flex flex-col bg-gray-200 rounded-md min-h-[120px] p-2 pl-4">
         <div>
-          <div
+          <button
+            type="button"
             className="mt-2 ml-1 pr-2 inline-flex items-center text-indigo-600 hover:cursor-pointer"
             onClick={() => {
               router.push(`/interviews/${interview?.id}`);
@@ -167,14 +147,12 @@ function EditInterview({ interview }: EditInterviewProps) {
           >
             <ArrowLeft className="mr-2" />
             <p className="text-sm font-semibold">Back to Summary</p>
-          </div>
+          </button>
         </div>
         <div className="flex flex-row justify-between">
           <p className="mt-3 mb-1 ml-2 font-medium">
             Interview Description{" "}
-            <span className="text-xs ml-2 font-normal">
-              (Your respondents will see this.)
-            </span>
+            <span className="text-xs ml-2 font-normal">(Your respondents will see this.)</span>
           </p>
           <div className="flex flex-row gap-3">
             <Button
@@ -189,10 +167,7 @@ function EditInterview({ interview }: EditInterviewProps) {
             </Button>
             <AlertDialog>
               <AlertDialogTrigger>
-                <Button
-                  disabled={isClicked}
-                  className="bg-red-500 hover:bg-red-600 mr-5 mt-2 p-2"
-                >
+                <Button disabled={isClicked} className="bg-red-500 hover:bg-red-600 mr-5 mt-2 p-2">
                   <TrashIcon size={16} className="" />
                 </Button>
               </AlertDialogTrigger>
@@ -200,8 +175,7 @@ function EditInterview({ interview }: EditInterviewProps) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    this interview.
+                    This action cannot be undone. This will permanently delete this interview.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -253,11 +227,10 @@ function EditInterview({ interview }: EditInterviewProps) {
                     className=" p-0 inline-block cursor-pointer hover:scale-105 ease-in-out duration-300  ml-1 mr-3 rounded-xl shrink-0 overflow-hidden"
                     key={item.id}
                   >
-                    <div
+                    <button
+                      type="button"
                       className={`w-[96px] overflow-hidden rounded-full ${
-                        selectedInterviewer === item.id
-                          ? "border-4 border-indigo-600"
-                          : ""
+                        selectedInterviewer === item.id ? "border-4 border-indigo-600" : ""
                       }`}
                       onClick={() => {
                         setSelectedInterviewer(item.id);
@@ -270,17 +243,15 @@ function EditInterview({ interview }: EditInterviewProps) {
                         height={70}
                         className="w-full h-full object-cover"
                       />
-                    </div>
-                    <CardTitle className="mt-0 text-xs text-center">
-                      {item.name}
-                    </CardTitle>
+                    </button>
+                    <CardTitle className="mt-0 text-xs text-center">{item.name}</CardTitle>
                   </div>
                 ))}
               </div>
             </div>
           </div>
         </div>
-        <label className="flex-col mt-2 ml-2 w-full">
+        <div className="flex-col mt-2 ml-2 w-full">
           <div className="flex items-center cursor-pointer">
             <span className="text-sm font-medium">
               Do you prefer the interviewees&apos; responses to be anonymous?
@@ -297,10 +268,9 @@ function EditInterview({ interview }: EditInterviewProps) {
             style={{ fontSize: "0.7rem", lineHeight: "0.66rem" }}
             className="font-light text-xs italic w-full text-left block"
           >
-            Note: If not anonymous, the interviewee&apos;s email and name will
-            be collected.
+            Note: If not anonymous, the interviewee&apos;s email and name will be collected.
           </span>
-        </label>
+        </div>
         <div className="flex flex-row justify-between w-[75%] gap-3 ml-2">
           <div className="flex flex-row justify-center items-center mt-5 ">
             <h3 className="font-medium ">No. of Questions:</h3>
@@ -313,10 +283,7 @@ function EditInterview({ interview }: EditInterviewProps) {
               value={numQuestions}
               onChange={(e) => {
                 let value = e.target.value;
-                if (
-                  value === "" ||
-                  (Number.isInteger(Number(value)) && Number(value) > 0)
-                ) {
+                if (value === "" || (Number.isInteger(Number(value)) && Number(value) > 0)) {
                   if (Number(value) > 5) {
                     value = "5";
                   }
@@ -336,10 +303,7 @@ function EditInterview({ interview }: EditInterviewProps) {
               value={Number(duration)}
               onChange={(e) => {
                 let value = e.target.value;
-                if (
-                  value === "" ||
-                  (Number.isInteger(Number(value)) && Number(value) > 0)
-                ) {
+                if (value === "" || (Number.isInteger(Number(value)) && Number(value) > 0)) {
                   if (Number(value) > 10) {
                     value = "10";
                   }
@@ -362,7 +326,8 @@ function EditInterview({ interview }: EditInterviewProps) {
           ))}
           <div ref={endOfListRef} />
           {questions.length < numQuestions ? (
-            <div
+            <button
+              type="button"
               className="border-indigo-600 opacity-75 hover:opacity-100 w-fit text-center rounded-full mx-auto"
               onClick={handleAddQuestion}
             >
@@ -371,7 +336,7 @@ function EditInterview({ interview }: EditInterviewProps) {
                 strokeWidth={2.2}
                 className="text-indigo-600 text-center cursor-pointer"
               />
-            </div>
+            </button>
           ) : (
             <></>
           )}

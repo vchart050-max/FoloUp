@@ -35,9 +35,9 @@ const getAllResponses = async (interviewId: string) => {
   try {
     const { data, error } = await supabase
       .from("response")
-      .select(`*`)
+      .select("*")
       .eq("interview_id", interviewId)
-      .or(`details.is.null, details->call_analysis.not.is.null`)
+      .or("details.is.null, details->call_analysis.not.is.null")
       .eq("is_ended", true)
       .order("created_at", { ascending: false });
 
@@ -49,9 +49,7 @@ const getAllResponses = async (interviewId: string) => {
   }
 };
 
-const getResponseCountByOrganizationId = async (
-  organizationId: string,
-): Promise<number> => {
+const getResponseCountByOrganizationId = async (organizationId: string): Promise<number> => {
   try {
     const { count, error } = await supabase
       .from("interview")
@@ -70,7 +68,7 @@ const getAllEmailAddressesForInterview = async (interviewId: string) => {
   try {
     const { data, error } = await supabase
       .from("response")
-      .select(`email`)
+      .select("email")
       .eq("interview_id", interviewId);
 
     return data || [];
@@ -83,10 +81,7 @@ const getAllEmailAddressesForInterview = async (interviewId: string) => {
 
 const getResponseByCallId = async (id: string) => {
   try {
-    const { data, error } = await supabase
-      .from("response")
-      .select(`*`)
-      .filter("call_id", "eq", id);
+    const { data, error } = await supabase.from("response").select("*").filter("call_id", "eq", id);
 
     return data ? data[0] : null;
   } catch (error) {
@@ -97,10 +92,7 @@ const getResponseByCallId = async (id: string) => {
 };
 
 const deleteResponse = async (id: string) => {
-  const { error, data } = await supabase
-    .from("response")
-    .delete()
-    .eq("call_id", id);
+  const { error, data } = await supabase.from("response").delete().eq("call_id", id);
   if (error) {
     console.log(error);
 

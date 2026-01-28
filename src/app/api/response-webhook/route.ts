@@ -1,10 +1,10 @@
 import axios from "axios";
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { Retell } from "retell-sdk";
 
 const apiKey = process.env.RETELL_API_KEY || "";
 
-export async function POST(req: NextRequest, res: NextResponse) {
+export async function POST(req: NextRequest) {
   if (req.method !== "POST") {
     return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
   }
@@ -30,12 +30,13 @@ export async function POST(req: NextRequest, res: NextResponse) {
     case "call_ended":
       console.log("Call ended event received", call.call_id);
       break;
-    case "call_analyzed":
+    case "call_analyzed": {
       const result = await axios.post("/api/get-call", {
         id: call.call_id,
       });
       console.log("Call analyzed event received", call.call_id);
       break;
+    }
     default:
       console.log("Received an unknown event:", event);
   }

@@ -1,14 +1,11 @@
 "use server";
 
-import { OpenAI } from "openai";
-import { ResponseService } from "@/services/responses.service";
+import { SYSTEM_PROMPT, getInterviewAnalyticsPrompt } from "@/lib/prompts/analytics";
 import { InterviewService } from "@/services/interviews.service";
-import { Question } from "@/types/interview";
-import { Analytics } from "@/types/response";
-import {
-  getInterviewAnalyticsPrompt,
-  SYSTEM_PROMPT,
-} from "@/lib/prompts/analytics";
+import { ResponseService } from "@/services/responses.service";
+import type { Question } from "@/types/interview";
+import type { Analytics } from "@/types/response";
+import { OpenAI } from "openai";
 
 export const generateInterviewAnalytics = async (payload: {
   callId: string;
@@ -37,10 +34,7 @@ export const generateInterviewAnalytics = async (payload: {
       dangerouslyAllowBrowser: true,
     });
 
-    const prompt = getInterviewAnalyticsPrompt(
-      interviewTranscript,
-      mainInterviewQuestions,
-    );
+    const prompt = getInterviewAnalyticsPrompt(interviewTranscript, mainInterviewQuestions);
 
     const baseCompletion = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -61,9 +55,7 @@ export const generateInterviewAnalytics = async (payload: {
     const content = basePromptOutput.message?.content || "";
     const analyticsResponse = JSON.parse(content);
 
-    analyticsResponse.mainInterviewQuestions = questions.map(
-      (q: Question) => q.question,
-    );
+    analyticsResponse.mainInterviewQuestions = questions.map((q: Question) => q.question);
 
     return { analytics: analyticsResponse, status: 200 };
   } catch (error) {

@@ -2,17 +2,12 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 
 const supabase = createClientComponentClient();
 
-const getAllInterviewers = async (clientId: string = "") => {
+const getAllInterviewers = async (clientId = "") => {
   try {
-    const { data: clientData, error: clientError } = await supabase
-      .from("interviewer")
-      .select(`*`);
+    const { data: clientData, error: clientError } = await supabase.from("interviewer").select("*");
 
     if (clientError) {
-      console.error(
-        `Error fetching interviewers for clientId ${clientId}:`,
-        clientError,
-      );
+      console.error(`Error fetching interviewers for clientId ${clientId}:`, clientError);
 
       return [];
     }
@@ -46,9 +41,7 @@ const createInterviewer = async (payload: any) => {
     return null;
   }
 
-  const { error, data } = await supabase
-    .from("interviewer")
-    .insert({ ...payload });
+  const { error, data } = await supabase.from("interviewer").insert({ ...payload });
 
   if (error) {
     console.error("Error creating interviewer:", error);

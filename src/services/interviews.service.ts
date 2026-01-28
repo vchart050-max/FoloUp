@@ -6,7 +6,7 @@ const getAllInterviews = async (userId: string, organizationId: string) => {
   try {
     const { data: clientData, error: clientError } = await supabase
       .from("interview")
-      .select(`*`)
+      .select("*")
       .or(`organization_id.eq.${organizationId},user_id.eq.${userId}`)
       .order("created_at", { ascending: false });
 
@@ -22,7 +22,7 @@ const getInterviewById = async (id: string) => {
   try {
     const { data, error } = await supabase
       .from("interview")
-      .select(`*`)
+      .select("*")
       .or(`id.eq.${id},readable_slug.eq.${id}`);
 
     return data ? data[0] : null;
@@ -48,10 +48,7 @@ const updateInterview = async (payload: any, id: string) => {
 };
 
 const deleteInterview = async (id: string) => {
-  const { error, data } = await supabase
-    .from("interview")
-    .delete()
-    .eq("id", id);
+  const { error, data } = await supabase.from("interview").delete().eq("id", id);
   if (error) {
     console.log(error);
 
@@ -65,7 +62,7 @@ const getAllRespondents = async (interviewId: string) => {
   try {
     const { data, error } = await supabase
       .from("interview")
-      .select(`respondents`)
+      .select("respondents")
       .eq("interview_id", interviewId);
 
     return data || [];
@@ -77,9 +74,7 @@ const getAllRespondents = async (interviewId: string) => {
 };
 
 const createInterview = async (payload: any) => {
-  const { error, data } = await supabase
-    .from("interview")
-    .insert({ ...payload });
+  const { error, data } = await supabase.from("interview").insert({ ...payload });
   if (error) {
     console.log(error);
 
