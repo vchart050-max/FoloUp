@@ -1,21 +1,6 @@
 "use client";
 
-import type { Interview, Question } from "@/types/interview";
-import React, { useEffect, useRef, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-import { Plus, SaveIcon, TrashIcon } from "lucide-react";
-import { useInterviewers } from "@/contexts/interviewers.context";
 import QuestionCard from "@/components/dashboard/interview/create-popup/questionCard";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { useInterviews } from "@/contexts/interviews.context";
-import { InterviewService } from "@/services/interviews.service";
-import { CardTitle } from "../../ui/card";
-import Image from "next/image";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -27,6 +12,21 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Switch } from "@/components/ui/switch";
+import { useInterviewers } from "@/contexts/interviewers.context";
+import { useInterviews } from "@/contexts/interviews.context";
+import { InterviewService } from "@/services/interviews.service";
+import type { Interview, Question } from "@/types/interview";
+import { Plus, SaveIcon, TrashIcon } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
+import { CardTitle } from "../../ui/card";
 
 type EditInterviewProps = {
   interview: Interview | undefined;
@@ -36,27 +36,13 @@ function EditInterview({ interview }: EditInterviewProps) {
   const { interviewers } = useInterviewers();
   const { fetchInterviews } = useInterviews();
 
-  const [description, setDescription] = useState<string>(
-    interview?.description || "",
-  );
-  const [objective, setObjective] = useState<string>(
-    interview?.objective || "",
-  );
-  const [numQuestions, setNumQuestions] = useState<number>(
-    interview?.question_count || 1,
-  );
-  const [duration, setDuration] = useState<number>(
-    Number(interview?.time_duration),
-  );
-  const [questions, setQuestions] = useState<Question[]>(
-    interview?.questions || [],
-  );
-  const [selectedInterviewer, setSelectedInterviewer] = useState(
-    interview?.interviewer_id,
-  );
-  const [isAnonymous, setIsAnonymous] = useState<boolean>(
-    interview?.is_anonymous || false,
-  );
+  const [description, setDescription] = useState<string>(interview?.description || "");
+  const [objective, setObjective] = useState<string>(interview?.objective || "");
+  const [numQuestions, setNumQuestions] = useState<number>(interview?.question_count || 1);
+  const [duration, setDuration] = useState<number>(Number(interview?.time_duration));
+  const [questions, setQuestions] = useState<Question[]>(interview?.questions || []);
+  const [selectedInterviewer, setSelectedInterviewer] = useState(interview?.interviewer_id);
+  const [isAnonymous, setIsAnonymous] = useState<boolean>(interview?.is_anonymous || false);
 
   const [isClicked, setIsClicked] = useState(false);
 
@@ -90,16 +76,12 @@ function EditInterview({ interview }: EditInterviewProps) {
 
   const handleAddQuestion = () => {
     if (questions.length < numQuestions) {
-      setQuestions([
-        ...questions,
-        { id: uuidv4(), question: "", follow_up_count: 1 },
-      ]);
+      setQuestions([...questions, { id: uuidv4(), question: "", follow_up_count: 1 }]);
     }
   };
 
   const onSave = async () => {
-    const questionCount =
-      questions.length < numQuestions ? questions.length : numQuestions;
+    const questionCount = questions.length < numQuestions ? questions.length : numQuestions;
 
     const interviewData = {
       objective: objective,
@@ -115,10 +97,7 @@ function EditInterview({ interview }: EditInterviewProps) {
       if (!interview) {
         return;
       }
-      const response = await InterviewService.updateInterview(
-        interviewData,
-        interview?.id,
-      );
+      const response = await InterviewService.updateInterview(interviewData, interview?.id);
       setIsClicked(false);
       fetchInterviews();
       toast.success("Interview updated successfully.", {
@@ -173,9 +152,7 @@ function EditInterview({ interview }: EditInterviewProps) {
         <div className="flex flex-row justify-between">
           <p className="mt-3 mb-1 ml-2 font-medium">
             Interview Description{" "}
-            <span className="text-xs ml-2 font-normal">
-              (Your respondents will see this.)
-            </span>
+            <span className="text-xs ml-2 font-normal">(Your respondents will see this.)</span>
           </p>
           <div className="flex flex-row gap-3">
             <Button
@@ -190,10 +167,7 @@ function EditInterview({ interview }: EditInterviewProps) {
             </Button>
             <AlertDialog>
               <AlertDialogTrigger>
-                <Button
-                  disabled={isClicked}
-                  className="bg-red-500 hover:bg-red-600 mr-5 mt-2 p-2"
-                >
+                <Button disabled={isClicked} className="bg-red-500 hover:bg-red-600 mr-5 mt-2 p-2">
                   <TrashIcon size={16} className="" />
                 </Button>
               </AlertDialogTrigger>
@@ -201,8 +175,7 @@ function EditInterview({ interview }: EditInterviewProps) {
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                   <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    this interview.
+                    This action cannot be undone. This will permanently delete this interview.
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -257,9 +230,7 @@ function EditInterview({ interview }: EditInterviewProps) {
                     <button
                       type="button"
                       className={`w-[96px] overflow-hidden rounded-full ${
-                        selectedInterviewer === item.id
-                          ? "border-4 border-indigo-600"
-                          : ""
+                        selectedInterviewer === item.id ? "border-4 border-indigo-600" : ""
                       }`}
                       onClick={() => {
                         setSelectedInterviewer(item.id);
@@ -273,9 +244,7 @@ function EditInterview({ interview }: EditInterviewProps) {
                         className="w-full h-full object-cover"
                       />
                     </button>
-                    <CardTitle className="mt-0 text-xs text-center">
-                      {item.name}
-                    </CardTitle>
+                    <CardTitle className="mt-0 text-xs text-center">{item.name}</CardTitle>
                   </div>
                 ))}
               </div>
@@ -299,8 +268,7 @@ function EditInterview({ interview }: EditInterviewProps) {
             style={{ fontSize: "0.7rem", lineHeight: "0.66rem" }}
             className="font-light text-xs italic w-full text-left block"
           >
-            Note: If not anonymous, the interviewee&apos;s email and name will
-            be collected.
+            Note: If not anonymous, the interviewee&apos;s email and name will be collected.
           </span>
         </div>
         <div className="flex flex-row justify-between w-[75%] gap-3 ml-2">
@@ -315,10 +283,7 @@ function EditInterview({ interview }: EditInterviewProps) {
               value={numQuestions}
               onChange={(e) => {
                 let value = e.target.value;
-                if (
-                  value === "" ||
-                  (Number.isInteger(Number(value)) && Number(value) > 0)
-                ) {
+                if (value === "" || (Number.isInteger(Number(value)) && Number(value) > 0)) {
                   if (Number(value) > 5) {
                     value = "5";
                   }
@@ -338,10 +303,7 @@ function EditInterview({ interview }: EditInterviewProps) {
               value={Number(duration)}
               onChange={(e) => {
                 let value = e.target.value;
-                if (
-                  value === "" ||
-                  (Number.isInteger(Number(value)) && Number(value) > 0)
-                ) {
+                if (value === "" || (Number.isInteger(Number(value)) && Number(value) > 0)) {
                   if (Number(value) > 10) {
                     value = "10";
                   }

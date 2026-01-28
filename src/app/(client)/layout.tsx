@@ -1,14 +1,14 @@
 "use client";
 
 import "../globals.css";
-import { Inter } from "next/font/google";
-import { cn } from "@/lib/utils";
 import Navbar from "@/components/navbar";
 import Providers from "@/components/providers";
-import { ClerkProvider } from "@clerk/nextjs";
-import { Toaster } from "sonner";
 import SideMenu from "@/components/sideMenu";
+import { cn } from "@/lib/utils";
+import { ClerkProvider } from "@clerk/nextjs";
+import { Inter } from "next/font/google";
 import { usePathname } from "next/navigation";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -37,8 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const isAuthRoute =
-    pathname.includes("/sign-in") || pathname.includes("/sign-up");
+  const isAuthRoute = pathname.includes("/sign-in") || pathname.includes("/sign-up");
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -47,12 +46,7 @@ export default function RootLayout({
         <meta name="description" content={metadata.description} />
         <link rel="icon" href="/browser-client-icon.ico" />
       </head>
-      <body
-        className={cn(
-          inter.className,
-          "antialiased overflow-hidden min-h-screen",
-        )}
-      >
+      <body className={cn(inter.className, "antialiased overflow-hidden min-h-screen")}>
         <ClerkProvider
           dynamic
           signInFallbackRedirectUrl={"/dashboard"}

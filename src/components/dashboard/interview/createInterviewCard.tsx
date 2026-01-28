@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
-import { Plus } from "lucide-react";
-import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import CreateInterviewModal from "@/components/dashboard/interview/createInterviewModal";
 import Modal from "@/components/dashboard/Modal";
+import CreateInterviewModal from "@/components/dashboard/interview/createInterviewModal";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
+import { Plus } from "lucide-react";
+import React, { useState } from "react";
 
 function CreateInterviewCard() {
   const [open, setOpen] = useState(false);
@@ -21,9 +21,7 @@ function CreateInterviewCard() {
           <div className="flex flex-col justify-center items-center w-full overflow-hidden">
             <Plus size={90} strokeWidth={0.5} className="text-gray-700" />
           </div>
-          <CardTitle className="p-0 text-md text-center">
-            Create an Interview
-          </CardTitle>
+          <CardTitle className="p-0 text-md text-center">Create an Interview</CardTitle>
         </CardContent>
       </Card>
       <Modal

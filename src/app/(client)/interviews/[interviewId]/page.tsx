@@ -1,32 +1,13 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import React, { useState, useEffect, use } from "react";
-import { useOrganization } from "@clerk/nextjs";
-import { useInterviews } from "@/contexts/interviews.context";
-import { Share2, Filter, Pencil, UserIcon, Eye, Palette } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { useRouter } from "next/navigation";
-import { ResponseService } from "@/services/responses.service";
-import { ClientService } from "@/services/clients.service";
-import type { Interview } from "@/types/interview";
-import type { Response } from "@/types/response";
-import { formatTimestampToDateHHMM } from "@/lib/utils";
 import CallInfo from "@/components/call/callInfo";
-import SummaryInfo from "@/components/dashboard/interview/summaryInfo";
-import { InterviewService } from "@/services/interviews.service";
-import EditInterview from "@/components/dashboard/interview/editInterview";
 import Modal from "@/components/dashboard/Modal";
-import { toast } from "sonner";
-import { ChromePicker } from "react-color";
+import EditInterview from "@/components/dashboard/interview/editInterview";
 import SharePopup from "@/components/dashboard/interview/sharePopup";
-import {
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-  TooltipProvider,
-} from "@/components/ui/tooltip";
+import SummaryInfo from "@/components/dashboard/interview/summaryInfo";
+import LoaderWithText from "@/components/loaders/loader-with-text/loaderWithText";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Select,
   SelectContent,
@@ -34,8 +15,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useInterviews } from "@/contexts/interviews.context";
 import { CandidateStatus } from "@/lib/enum";
-import LoaderWithText from "@/components/loaders/loader-with-text/loaderWithText";
+import { formatTimestampToDateHHMM } from "@/lib/utils";
+import { ClientService } from "@/services/clients.service";
+import { InterviewService } from "@/services/interviews.service";
+import { ResponseService } from "@/services/responses.service";
+import type { Interview } from "@/types/interview";
+import type { Response } from "@/types/response";
+import { useOrganization } from "@clerk/nextjs";
+import { Eye, Filter, Palette, Pencil, Share2, UserIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useState, useEffect, use } from "react";
+import { ChromePicker } from "react-color";
+import { toast } from "sonner";
 
 interface Props {
   params: Promise<{
@@ -59,8 +54,7 @@ function InterviewHome({ params, searchParams }: Props) {
   const router = useRouter();
   const [isActive, setIsActive] = useState<boolean>(true);
   const [currentPlan, setCurrentPlan] = useState<string>("");
-  const [isGeneratingInsights, setIsGeneratingInsights] =
-    useState<boolean>(false);
+  const [isGeneratingInsights, setIsGeneratingInsights] = useState<boolean>(false);
   const [isViewed, setIsViewed] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [showColorPicker, setShowColorPicker] = useState<boolean>(false);
@@ -102,12 +96,7 @@ function InterviewHome({ params, searchParams }: Props) {
     if (!interview || !isGeneratingInsights) {
       fetchInterview();
     }
-  }, [
-    getInterviewById,
-    resolvedParams.interviewId,
-    isGeneratingInsights,
-    interview,
-  ]);
+  }, [getInterviewById, resolvedParams.interviewId, isGeneratingInsights, interview]);
 
   useEffect(() => {
     const fetchOrganizationData = async () => {
@@ -128,9 +117,7 @@ function InterviewHome({ params, searchParams }: Props) {
   useEffect(() => {
     const fetchResponses = async () => {
       try {
-        const response = await ResponseService.getAllResponses(
-          resolvedParams.interviewId,
-        );
+        const response = await ResponseService.getAllResponses(resolvedParams.interviewId);
         setResponses(response);
         setLoading(true);
       } catch (error) {
@@ -145,9 +132,7 @@ function InterviewHome({ params, searchParams }: Props) {
 
   const handleDeleteResponse = (deletedCallId: string) => {
     if (responses) {
-      setResponses(
-        responses.filter((response) => response.call_id !== deletedCallId),
-      );
+      setResponses(responses.filter((response) => response.call_id !== deletedCallId));
       if (resolvedSearchParams.call === deletedCallId) {
         router.push(`/interviews/${resolvedParams.interviewId}`);
       }
@@ -180,9 +165,7 @@ function InterviewHome({ params, searchParams }: Props) {
       );
 
       toast.success("Interview status updated", {
-        description: `The interview is now ${
-          updatedIsActive ? "active" : "inactive"
-        }.`,
+        description: `The interview is now ${updatedIsActive ? "active" : "inactive"}.`,
         position: "bottom-right",
         duration: 3000,
       });
@@ -197,10 +180,7 @@ function InterviewHome({ params, searchParams }: Props) {
 
   const handleThemeColorChange = async (newColor: string) => {
     try {
-      await InterviewService.updateInterview(
-        { theme_color: newColor },
-        resolvedParams.interviewId,
-      );
+      await InterviewService.updateInterview({ theme_color: newColor }, resolvedParams.interviewId);
 
       toast.success("Theme color updated", {
         position: "bottom-right",
@@ -218,9 +198,7 @@ function InterviewHome({ params, searchParams }: Props) {
   const handleCandidateStatusChange = (callId: string, newStatus: string) => {
     setResponses((prevResponses) => {
       return prevResponses?.map((response) =>
-        response.call_id === callId
-          ? { ...response, candidate_status: newStatus }
-          : response,
+        response.call_id === callId ? { ...response, candidate_status: newStatus } : response,
       );
     });
   };
@@ -253,9 +231,7 @@ function InterviewHome({ params, searchParams }: Props) {
       return responses;
     }
 
-    return responses?.filter(
-      (response) => response?.candidate_status === filterStatus,
-    );
+    return responses?.filter((response) => response?.candidate_status === filterStatus);
   };
 
   return (
@@ -275,8 +251,7 @@ function InterviewHome({ params, searchParams }: Props) {
             />
 
             <div className="flex flex-row gap-3 my-auto">
-              <UserIcon className="my-auto" size={16} />:{" "}
-              {String(responses?.length)}
+              <UserIcon className="my-auto" size={16} />: {String(responses?.length)}
             </div>
 
             <TooltipProvider>
@@ -295,11 +270,7 @@ function InterviewHome({ params, searchParams }: Props) {
                     <Share2 size={16} />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent
-                  className="bg-zinc-300"
-                  side="bottom"
-                  sideOffset={4}
-                >
+                <TooltipContent className="bg-zinc-300" side="bottom" sideOffset={4}>
                   <span className="text-black flex flex-row gap-4">Share</span>
                 </TooltipContent>
               </Tooltip>
@@ -317,14 +288,8 @@ function InterviewHome({ params, searchParams }: Props) {
                     <Eye />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent
-                  className="bg-zinc-300"
-                  side="bottom"
-                  sideOffset={4}
-                >
-                  <span className="text-black flex flex-row gap-4">
-                    Preview
-                  </span>
+                <TooltipContent className="bg-zinc-300" side="bottom" sideOffset={4}>
+                  <span className="text-black flex flex-row gap-4">Preview</span>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -341,14 +306,8 @@ function InterviewHome({ params, searchParams }: Props) {
                     <Palette size={19} />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent
-                  className="bg-zinc-300"
-                  side="bottom"
-                  sideOffset={4}
-                >
-                  <span className="text-black flex flex-row gap-4">
-                    Theme Color
-                  </span>
+                <TooltipContent className="bg-zinc-300" side="bottom" sideOffset={4}>
+                  <span className="text-black flex flex-row gap-4">Theme Color</span>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -358,19 +317,13 @@ function InterviewHome({ params, searchParams }: Props) {
                   <Button
                     className="bg-transparent shadow-none text-xs text-indigo-600 px-0 h-7 hover:scale-110 relative"
                     onClick={(event) => {
-                      router.push(
-                        `/interviews/${resolvedParams.interviewId}?edit=true`,
-                      );
+                      router.push(`/interviews/${resolvedParams.interviewId}?edit=true`);
                     }}
                   >
                     <Pencil size={16} />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent
-                  className="bg-zinc-300"
-                  side="bottom"
-                  sideOffset={4}
-                >
+                <TooltipContent className="bg-zinc-300" side="bottom" sideOffset={4}>
                   <span className="text-black flex flex-row gap-4">Edit</span>
                 </TooltipContent>
               </Tooltip>
@@ -382,11 +335,7 @@ function InterviewHome({ params, searchParams }: Props) {
                   <span className="ms-3 my-auto text-sm">Inactive</span>
                   <TooltipProvider>
                     <Tooltip>
-                      <TooltipContent
-                        className="bg-zinc-300"
-                        side="bottom"
-                        sideOffset={4}
-                      >
+                      <TooltipContent className="bg-zinc-300" side="bottom" sideOffset={4}>
                         Upgrade your plan to reactivate
                       </TooltipContent>
                     </Tooltip>
@@ -397,9 +346,7 @@ function InterviewHome({ params, searchParams }: Props) {
                   <span className="ms-3 my-auto text-sm">Active</span>
                   <Switch
                     checked={isActive}
-                    className={`ms-3 my-auto ${
-                      isActive ? "bg-indigo-600" : "bg-[#E6E7EB]"
-                    }`}
+                    className={`ms-3 my-auto ${isActive ? "bg-indigo-600" : "bg-[#E6E7EB]"}`}
                     onCheckedChange={handleToggle}
                   />
                 </>
@@ -484,22 +431,16 @@ function InterviewHome({ params, searchParams }: Props) {
                         <div className="flex items-center justify-between w-full">
                           <div className="flex flex-col my-auto">
                             <p className="font-medium mb-[2px]">
-                              {response?.name
-                                ? `${response?.name}'s Response`
-                                : "Anonymous"}
+                              {response?.name ? `${response?.name}'s Response` : "Anonymous"}
                             </p>
                             <p className="">
-                              {formatTimestampToDateHHMM(
-                                String(response?.created_at),
-                              )}
+                              {formatTimestampToDateHHMM(String(response?.created_at))}
                             </p>
                           </div>
                           <div className="flex flex-col items-center justify-center ml-auto flex-shrink-0">
                             {!response.is_viewed && (
                               <div className="w-4 h-4 flex items-center justify-center mb-1">
-                                <div className="text-indigo-500 text-xl leading-none">
-                                  ●
-                                </div>
+                                <div className="text-indigo-500 text-xl leading-none">●</div>
                               </div>
                             )}
                             <div
@@ -508,8 +449,7 @@ function InterviewHome({ params, searchParams }: Props) {
                               }`}
                             >
                               {response.analytics &&
-                                response.analytics.overallScore !==
-                                  undefined && (
+                                response.analytics.overallScore !== undefined && (
                                   <TooltipProvider>
                                     <Tooltip>
                                       <TooltipTrigger asChild>
@@ -538,9 +478,7 @@ function InterviewHome({ params, searchParams }: Props) {
                     </button>
                   ))
                 ) : (
-                  <p className="text-center text-gray-500">
-                    No responses to display
-                  </p>
+                  <p className="text-center text-gray-500">No responses to display</p>
                 )}
               </ScrollArea>
             </div>
@@ -562,15 +500,9 @@ function InterviewHome({ params, searchParams }: Props) {
           </div>
         </>
       )}
-      <Modal
-        open={showColorPicker}
-        closeOnOutsideClick={false}
-        onClose={applyColorChange}
-      >
+      <Modal open={showColorPicker} closeOnOutsideClick={false} onClose={applyColorChange}>
         <div className="w-[250px] p-3">
-          <h3 className="text-lg font-semibold mb-4 text-center">
-            Choose a Theme Color
-          </h3>
+          <h3 className="text-lg font-semibold mb-4 text-center">Choose a Theme Color</h3>
           <ChromePicker
             disableAlpha={true}
             color={themeColor}

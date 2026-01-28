@@ -13,9 +13,7 @@ export async function POST(req: Request) {
   logger.info("get-call request received");
   const body = await req.json();
 
-  const callDetails: Response = await ResponseService.getResponseByCallId(
-    body.id,
-  );
+  const callDetails: Response = await ResponseService.getResponseByCallId(body.id);
   let callResponse = callDetails.details;
   if (callDetails.is_analysed) {
     return NextResponse.json(

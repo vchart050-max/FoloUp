@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useContext, type ReactNode, useEffect } from "react";
+import { ClientService } from "@/services/clients.service";
 import type { User } from "@/types/user";
 import { useClerk, useOrganization } from "@clerk/nextjs";
-import { ClientService } from "@/services/clients.service";
+import React, { useState, useContext, type ReactNode, useEffect } from "react";
 
 interface ClientContextProps {
   client?: User;

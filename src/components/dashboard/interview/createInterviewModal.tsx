@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import LoaderWithLogo from "@/components/loaders/loader-with-logo/loaderWithLogo";
 import DetailsPopup from "@/components/dashboard/interview/create-popup/details";
 import QuestionsPopup from "@/components/dashboard/interview/create-popup/questions";
+import LoaderWithLogo from "@/components/loaders/loader-with-logo/loaderWithLogo";
 import type { InterviewBase } from "@/types/interview";
+import React, { useEffect, useState } from "react";
 
 interface Props {
   open: boolean;
@@ -26,9 +26,7 @@ const CreateEmptyInterviewData = (): InterviewBase => ({
 function CreateInterviewModal({ open, setOpen }: Props) {
   const [loading, setLoading] = useState(false);
   const [proceed, setProceed] = useState(false);
-  const [interviewData, setInterviewData] = useState<InterviewBase>(
-    CreateEmptyInterviewData(),
-  );
+  const [interviewData, setInterviewData] = useState<InterviewBase>(CreateEmptyInterviewData());
 
   // Below for File Upload
   const [isUploaded, setIsUploaded] = useState(false);
@@ -73,11 +71,7 @@ function CreateInterviewModal({ open, setOpen }: Props) {
           setFileName={setFileName}
         />
       ) : (
-        <QuestionsPopup
-          interviewData={interviewData}
-          setProceed={setProceed}
-          setOpen={setOpen}
-        />
+        <QuestionsPopup interviewData={interviewData} setProceed={setProceed} setOpen={setOpen} />
       )}
     </>
   );

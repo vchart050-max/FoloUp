@@ -48,10 +48,7 @@ const updateInterview = async (payload: any, id: string) => {
 };
 
 const deleteInterview = async (id: string) => {
-  const { error, data } = await supabase
-    .from("interview")
-    .delete()
-    .eq("id", id);
+  const { error, data } = await supabase.from("interview").delete().eq("id", id);
   if (error) {
     console.log(error);
 
@@ -77,9 +74,7 @@ const getAllRespondents = async (interviewId: string) => {
 };
 
 const createInterview = async (payload: any) => {
-  const { error, data } = await supabase
-    .from("interview")
-    .insert({ ...payload });
+  const { error, data } = await supabase.from("interview").insert({ ...payload });
   if (error) {
     console.log(error);
 

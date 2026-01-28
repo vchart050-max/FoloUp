@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
 import { X } from "lucide-react";
+import type { ReactNode } from "react";
 
 interface ModalProps {
   open: boolean;
@@ -8,12 +8,7 @@ interface ModalProps {
   closeOnOutsideClick?: boolean;
 }
 
-export default function Modal({
-  open,
-  onClose,
-  closeOnOutsideClick = true,
-  children,
-}: ModalProps) {
+export default function Modal({ open, onClose, closeOnOutsideClick = true, children }: ModalProps) {
   return (
     <div
       className={`fixed z-50 inset-0 flex justify-center items-center transition-colors

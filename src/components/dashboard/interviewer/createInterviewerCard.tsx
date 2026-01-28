@@ -1,17 +1,17 @@
-/* eslint-disable react-hooks/rules-of-hooks */
-import React from "react";
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { Image as LucideImage } from "lucide-react";
-import { Plus } from "lucide-react";
-import { CardTitle } from "@/components/ui/card";
 import Modal from "@/components/dashboard/Modal";
-import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
 import { avatars } from "@/components/dashboard/interviewer/avatars";
+import { Button } from "@/components/ui/button";
+import { CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Slider } from "@/components/ui/slider";
 import { useInterviewers } from "@/contexts/interviewers.context";
 import { useClerk } from "@clerk/nextjs";
+import { Image as LucideImage } from "lucide-react";
+import { Plus } from "lucide-react";
+import Image from "next/image";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React from "react";
+import { useEffect, useState } from "react";
 
 const createInterviewerCard = () => {
   const [open, setOpen] = useState(false);
@@ -99,11 +99,7 @@ const createInterviewerCard = () => {
                 />
               ) : (
                 <div>
-                  <LucideImage
-                    className="mt-3 text-gray-300"
-                    size={100}
-                    strokeWidth={0.7}
-                  />
+                  <LucideImage className="mt-3 text-gray-300" size={100} strokeWidth={0.7} />
                   <h4 className="text-xs text-center font-medium text-gray-400">
                     Choose an Avatar
                   </h4>
@@ -196,9 +192,7 @@ const createInterviewerCard = () => {
         }}
       >
         <div className="text-left w-[20rem]">
-          <CardTitle className="text-xl text mt-0 p-0 font-semibold ">
-            Select an Avatar
-          </CardTitle>
+          <CardTitle className="text-xl text mt-0 p-0 font-semibold ">Select an Avatar</CardTitle>
           <ScrollArea className="mt-3 h-96">
             <div className="flex flex-row flex-wrap justify-center items-center">
               {avatars.map((item) => (

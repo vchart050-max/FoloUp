@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
 import { PlayCircleIcon, SpeechIcon } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import React from "react";
 
 function SideMenu() {
   const pathname = usePathname();
@@ -15,8 +15,7 @@ function SideMenu() {
           <button
             type="button"
             className={`flex flex-row p-3 rounded-md hover:bg-slate-200 cursor-pointer ${
-              pathname.endsWith("/dashboard") ||
-              pathname.includes("/interviews")
+              pathname.endsWith("/dashboard") || pathname.includes("/interviews")
                 ? "bg-indigo-200"
                 : "bg-slate-100"
             }`}
@@ -28,9 +27,7 @@ function SideMenu() {
           <button
             type="button"
             className={`flex flex-row p-3 rounded-md hover:bg-slate-200 cursor-pointer ${
-              pathname.endsWith("/interviewers")
-                ? "bg-indigo-200"
-                : "bg-slate-100"
+              pathname.endsWith("/interviewers") ? "bg-indigo-200" : "bg-slate-100"
             }`}
             onClick={() => router.push("/dashboard/interviewers")}
           >
