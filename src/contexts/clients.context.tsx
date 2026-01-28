@@ -52,6 +52,7 @@ export function ClientProvider({ children }: ClientProviderProps) {
     setClientLoading(false);
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (user?.id) {
       fetchClient();
@@ -59,6 +60,7 @@ export function ClientProvider({ children }: ClientProviderProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (organization?.id) {
       fetchOrganization();

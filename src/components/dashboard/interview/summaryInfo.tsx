@@ -94,6 +94,7 @@ function SummaryInfo({ responses, interview }: SummaryProps) {
     setInterviewer(interviewer);
   }, [interviewers, interview]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!responses) {
       return;

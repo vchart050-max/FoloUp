@@ -106,6 +106,7 @@ function Call({ interview }: InterviewProps) {
     }
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (lastUserResponseRef.current) {
       const { current } = lastUserResponseRef;
@@ -113,6 +114,7 @@ function Call({ interview }: InterviewProps) {
     }
   }, [lastUserResponse]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     let intervalId: any;
     if (isCalling) {
@@ -261,6 +263,7 @@ function Call({ interview }: InterviewProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [interview.interviewer_id]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (isEnded) {
       const updateInterview = async () => {

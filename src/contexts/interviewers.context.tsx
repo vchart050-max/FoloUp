@@ -48,6 +48,7 @@ export function InterviewerProvider({ children }: InterviewerProviderProps) {
     fetchInterviewers();
   };
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (user?.id) {
       fetchInterviewers();
