@@ -22,13 +22,14 @@ import type { FeedbackData } from "@/types/response";
 import axios from "axios";
 import { AlarmClockIcon, ArrowUpRightSquareIcon, CheckCircleIcon, XCircleIcon } from "lucide-react";
 import Image from "next/image";
-import React, { useState, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { RetellWebClient } from "retell-client-js-sdk";
 import { toast } from "sonner";
 import MiniLoader from "../loaders/mini-loader/miniLoader";
 import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle } from "../ui/card";
 import { TabSwitchWarning, useTabSwitchPrevention } from "./tabSwitchPrevention";
+import { VideoCall } from "./videoCall";
 
 const webClient = new RetellWebClient();
 
@@ -57,6 +58,7 @@ function Call({ interview }: InterviewProps) {
   const [activeTurn, setActiveTurn] = useState<string>("");
   const [Loading, setLoading] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
+  const [useVideo, setUseVideo] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
   const [isCalling, setIsCalling] = useState(false);
   const [email, setEmail] = useState<string>("");
@@ -219,7 +221,7 @@ function Call({ interview }: InterviewProps) {
 
         setCallId(registerCallResponse?.data?.registerCallResponse?.call_id);
 
-        const response = await createResponse({
+        await createResponse({
           interview_id: interview.id,
           call_id: registerCallResponse.data.registerCallResponse.call_id,
           email: email,
@@ -442,6 +444,14 @@ function Call({ interview }: InterviewProps) {
                 </div>
               </div>
             )}
+            {isStarted && !isEnded && !isOldUser && (
+              <button type="button" onClick={() => setUseVideo(!useVideo)}>
+                {useVideo ? "Switch to Voice" : "Switch to Video"}
+              </button>
+            )}
+
+            {/* Show video when enabled */}
+            {useVideo && <VideoCall interview={interview} onEnd={onEndCallClick} />}
             {isStarted && !isEnded && !isOldUser && (
               <div className="items-center p-2">
                 <AlertDialog>

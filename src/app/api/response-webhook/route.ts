@@ -1,46 +1,50 @@
-import axios from "axios";
+import crypto from "node:crypto";
+import { createClient } from "@supabase/supabase-js";
 import { type NextRequest, NextResponse } from "next/server";
-import { Retell } from "retell-sdk";
 
-const apiKey = process.env.RETELL_API_KEY || "";
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-export async function POST(req: NextRequest) {
-  if (req.method !== "POST") {
-    return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
-  }
+if (!supabaseUrl || !supabaseKey) {
+  throw new Error("Missing Supabase environment variables");
+}
 
-  if (
-    !Retell.verify(
-      JSON.stringify(req.body),
-      apiKey,
-      req.headers.get("x-retell-signature") as string,
-    )
-  ) {
-    console.error("Invalid signature");
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-    return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
-  }
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
 
-  const { event, call } = req.body as unknown as { event: string; call: any };
-
-  switch (event) {
-    case "call_started":
-      console.log("Call started event received", call.call_id);
-      break;
-    case "call_ended":
-      console.log("Call ended event received", call.call_id);
-      break;
-    case "call_analyzed": {
-      const result = await axios.post("/api/get-call", {
-        id: call.call_id,
-      });
-      console.log("Call analyzed event received", call.call_id);
-      break;
+    // Verify Razorpay signature
+    const secret = process.env.RAZORPAY_KEY_SECRET;
+    if (!secret) {
+      return NextResponse.json({ error: "Missing Razorpay secret" }, { status: 500 });
     }
-    default:
-      console.log("Received an unknown event:", event);
-  }
+    const signature = request.headers.get("x-razorpay-signature");
 
-  // Acknowledge the receipt of the event
-  return NextResponse.json({ status: 204 });
+    const hash = crypto.createHmac("sha256", secret).update(JSON.stringify(body)).digest("hex");
+
+    if (hash !== signature) {
+      return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+    }
+
+    // Get user and plan from webhook data
+    const { user_id, plan_id, order_id } = body.notes;
+
+    // Update user subscription in database
+    await supabase.from("subscription").insert([
+      {
+        user_id,
+        plan_id,
+        status: "active",
+        order_id,
+        started_at: new Date().toISOString(),
+      },
+    ]);
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Webhook error:", error);
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
+  }
 }
