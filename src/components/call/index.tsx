@@ -30,6 +30,7 @@ import { Button } from "../ui/button";
 import { Card, CardHeader, CardTitle } from "../ui/card";
 import { TabSwitchWarning, useTabSwitchPrevention } from "./tabSwitchPrevention";
 import { VideoCall } from "./videoCall";
+import { VideoInterview } from "./videoInterview";
 
 const webClient = new RetellWebClient();
 
@@ -305,7 +306,7 @@ function Call({ interview }: InterviewProps) {
                 </div>
               )}
             </CardHeader>
-            {!isStarted && !isEnded && !isOldUser && (
+            {!isStarted && !isEnded && !isOldUser && !useVideo && (
               <div className="w-fit min-w-[400px] max-w-[400px] mx-auto mt-2  border border-indigo-200 rounded-md p-2 m-2 bg-slate-50">
                 <div>
                   {interview?.logo_url && (
@@ -348,28 +349,36 @@ function Call({ interview }: InterviewProps) {
                     </div>
                   )}
                 </div>
-                <div className="w-[80%] flex flex-row mx-auto justify-center items-center align-middle">
-                  <Button
-                    className="min-w-20 h-10 rounded-lg flex flex-row justify-center mb-8"
-                    style={{
-                      backgroundColor: interview.theme_color ?? "#4F46E5",
-                      color: isLightColor(interview.theme_color ?? "#4F46E5") ? "black" : "white",
-                    }}
-                    disabled={Loading || (!interview?.is_anonymous && (!isValidEmail || !name))}
-                    onClick={startConversation}
+                <div className="w-[80%] flex flex-col mx-auto justify-center items-center align-middle">
+                  <button
+                    type="button"
+                    onClick={() => setUseVideo(!useVideo)}
+                    className="mb-4 px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
                   >
-                    {!Loading ? "Start Interview" : <MiniLoader />}
-                  </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger>
-                      <Button
-                        className="bg-white border ml-2 text-black min-w-15 h-10 rounded-lg flex flex-row justify-center mb-8"
-                        style={{ borderColor: interview.theme_color }}
-                        disabled={Loading}
-                      >
-                        Exit
-                      </Button>
-                    </AlertDialogTrigger>
+                    {useVideo ? "Switch to Voice Interview" : "Switch to Video Interview"}
+                  </button>
+                  <div className="flex flex-row w-full gap-2">
+                    <Button
+                      className="flex-1 h-10 rounded-lg flex flex-row justify-center"
+                      style={{
+                        backgroundColor: interview.theme_color ?? "#4F46E5",
+                        color: isLightColor(interview.theme_color ?? "#4F46E5") ? "black" : "white",
+                      }}
+                      disabled={Loading || (!interview?.is_anonymous && (!isValidEmail || !name))}
+                      onClick={startConversation}
+                    >
+                      {!Loading ? "Start Interview" : <MiniLoader />}
+                    </Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger>
+                        <Button
+                          className="bg-white border text-black h-10 rounded-lg flex flex-row justify-center"
+                          style={{ borderColor: interview.theme_color }}
+                          disabled={Loading}
+                        >
+                          Exit
+                        </Button>
+                      </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
@@ -387,7 +396,21 @@ function Call({ interview }: InterviewProps) {
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
+                  </div>
                 </div>
+              </div>
+            )}
+            {useVideo && !isStarted && !isEnded && !isOldUser && (
+              <div className="flex justify-center items-center p-4">
+                <VideoInterview
+                  interviewId={interview.id}
+                  questions={interview.questions}
+                  onComplete={(results) => {
+                    toast.success("Interview submitted successfully!");
+                    setIsEnded(true);
+                    setUseVideo(false);
+                  }}
+                />
               </div>
             )}
             {isStarted && !isEnded && !isOldUser && (
@@ -444,14 +467,6 @@ function Call({ interview }: InterviewProps) {
                 </div>
               </div>
             )}
-            {isStarted && !isEnded && !isOldUser && (
-              <button type="button" onClick={() => setUseVideo(!useVideo)}>
-                {useVideo ? "Switch to Voice" : "Switch to Video"}
-              </button>
-            )}
-
-            {/* Show video when enabled */}
-            {useVideo && <VideoCall interview={interview} onEnd={onEndCallClick} />}
             {isStarted && !isEnded && !isOldUser && (
               <div className="items-center p-2">
                 <AlertDialog>
