@@ -1,6 +1,6 @@
 "use client";
 
-import "../globals.css";
+import "./globals.css";
 import Navbar from "@/components/navbar";
 import Providers from "@/components/providers";
 import SideMenu from "@/components/sideMenu";
@@ -12,25 +12,6 @@ import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const metadata = {
-  title: "FoloUp",
-  description: " AI-powered Interviews",
-  openGraph: {
-    title: "FoloUp",
-    description: "AI-powered Interviews",
-    siteName: "FoloUp",
-    images: [
-      {
-        url: "/foloup.png",
-        width: 800,
-        height: 600,
-      },
-    ],
-    locale: "en_US",
-    type: "website",
-  },
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -41,11 +22,6 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-        <link rel="icon" href="/browser-client-icon.ico" />
-      </head>
       <body className={cn(inter.className, "antialiased overflow-hidden min-h-screen")}>
         <ClerkProvider
           dynamic

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "../globals.css";
+import "./globals.css";
 import Providers from "@/components/providers";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
@@ -9,15 +9,15 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"),
-  title: "FoloUp",
+  title: "ScoreBar",
   description: "AI powered Interviews",
   openGraph: {
-    title: "FoloUp",
+    title: "ScoreBar",
     description: "AI-powered Interviews",
-    siteName: "FoloUp",
+    siteName: "ScoreBar",
     images: [
       {
-        url: "/foloup.png",
+        url: "/scorebar.png",
         width: 800,
         height: 600,
       },
