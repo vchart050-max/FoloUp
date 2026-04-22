@@ -1,6 +1,6 @@
 "use client";
-
 import { FeedbackForm } from "@/components/call/feedbackForm";
+import { VideoInterview } from "@/components/call/videoInterview";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -58,6 +58,7 @@ function Call({ interview }: InterviewProps) {
   const [lastUserResponse, setLastUserResponse] = useState<string>("");
   const [activeTurn, setActiveTurn] = useState<string>("");
   const [Loading, setLoading] = useState(false);
+  const [useVideoMode, setUseVideoMode] = useState(false);
   const [isStarted, setIsStarted] = useState(false);
   const [useVideo, setUseVideo] = useState(false);
   const [isEnded, setIsEnded] = useState(false);
@@ -269,6 +270,28 @@ function Call({ interview }: InterviewProps) {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
       {isStarted && <TabSwitchWarning />}
+      <button
+        onClick={() => setUseVideoMode(!useVideoMode)}
+        className="mb-4 px-4 py-2 bg-gray-200 rounded text-sm font-semibold hover:bg-gray-300"
+      >
+        {useVideoMode ? "Switch to Voice Interview" : "Switch to Video Interview"}
+      </button>
+      {useVideoMode ? (
+  <VideoInterview
+    interviewId={interview.id}
+    questions={interview.questions.map((q, i) => ({
+      id: String(i),
+      question: q,
+    }))}
+    onComplete={(results) => {
+      toast.success("Video interview submitted!");
+      setIsEnded(true);
+    }}
+  />
+) : (
+  // THIS IS THE EXISTING INTERVIEW CODE (voice)
+  // Keep all the existing JSX here
+)}
       <div className="bg-white rounded-md md:w-[80%] w-[90%]">
         <Card className="h-[88vh] rounded-lg border-2 border-b-4 border-r-4 border-black text-xl font-bold transition-all  md:block dark:border-white ">
           <div>
@@ -379,23 +402,23 @@ function Call({ interview }: InterviewProps) {
                           Exit
                         </Button>
                       </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-indigo-600 hover:bg-indigo-800"
-                          onClick={async () => {
-                            await onEndCallClick();
-                          }}
-                        >
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            className="bg-indigo-600 hover:bg-indigo-800"
+                            onClick={async () => {
+                              await onEndCallClick();
+                            }}
+                          >
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </div>
                 </div>
               </div>

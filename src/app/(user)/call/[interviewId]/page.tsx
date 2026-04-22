@@ -1,6 +1,7 @@
 "use client";
 
 import Call from "@/components/call";
+import { VideoInterview } from "@/components/call/videoInterview";
 import LoaderWithText from "@/components/loaders/loader-with-text/loaderWithText";
 import { useInterviews } from "@/contexts/interviews.context";
 import type { Interview } from "@/types/interview";
