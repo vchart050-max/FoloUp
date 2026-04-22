@@ -1,6 +1,5 @@
 "use client";
 
-import "./globals.css";
 import Navbar from "@/components/navbar";
 import Providers from "@/components/providers";
 import SideMenu from "@/components/sideMenu";

@@ -46,7 +46,9 @@ export function VideoInterview({ interviewId, questions, onComplete }: VideoInte
     return () => {
       if (videoRef.current?.srcObject) {
         const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-        tracks.forEach((track) => track.stop());
+        for (const track of tracks) {
+          track.stop();
+        }
       }
     };
   }, []);
@@ -58,27 +60,18 @@ export function VideoInterview({ interviewId, questions, onComplete }: VideoInte
         setRecordingTime((prev) => prev + 1);
       }, 1000);
     } else {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
       setRecordingTime(0);
     }
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     };
   }, [isRecording]);
-  useVideoMode ? (
-    <VideoInterview
-      interviewId={interviewId}
-      questions={interviewData.questions}
-      onComplete={(results) => {
-        alert("Interview submitted!");
-        // Redirect to results page
-      }}
-    />
-  ) : (
-    // existing voice interview code
-    <ExistingInterviewComponent />
-  );
 
   const startRecording = async () => {
     try {
@@ -184,7 +177,7 @@ export function VideoInterview({ interviewId, questions, onComplete }: VideoInte
           <div
             className="bg-indigo-600 h-2 rounded-full transition-all duration-300"
             style={{ width: `${progress}%` }}
-          ></div>
+          />
         </div>
       </div>
 
@@ -201,7 +194,7 @@ export function VideoInterview({ interviewId, questions, onComplete }: VideoInte
 
           {isRecording && (
             <div className="absolute top-4 right-4 flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg">
-              <div className="w-3 h-3 bg-white rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
               <span className="font-semibold">
                 {Math.floor(recordingTime / 60)}:{String(recordingTime % 60).padStart(2, "0")}
               </span>
@@ -220,6 +213,7 @@ export function VideoInterview({ interviewId, questions, onComplete }: VideoInte
       <div className="flex gap-4 mb-6 flex-wrap">
         {!isRecording ? (
           <button
+            type="button"
             onClick={startRecording}
             disabled={isSubmitting}
             className="flex-1 bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 transition"
@@ -228,6 +222,7 @@ export function VideoInterview({ interviewId, questions, onComplete }: VideoInte
           </button>
         ) : (
           <button
+            type="button"
             onClick={stopRecording}
             className="flex-1 bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition"
           >
@@ -237,6 +232,7 @@ export function VideoInterview({ interviewId, questions, onComplete }: VideoInte
 
         {!isRecording && recordedBlobs.length > currentQuestionIndex && (
           <button
+            type="button"
             onClick={nextQuestion}
             disabled={isSubmitting}
             className="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 disabled:opacity-50 transition"
